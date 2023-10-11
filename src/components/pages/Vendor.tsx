@@ -3,6 +3,7 @@ import DataTable from '../DataTableBase';
 import {TableColumn} from 'react-data-table-component';
 import IVendor from '../models/IVendor';
 import { useNavigate } from 'react-router-dom';
+import InsertDataButton from '../InsertDataButton';
 
 
 const columns: TableColumn<IVendor>[] = [
@@ -22,32 +23,27 @@ const columns: TableColumn<IVendor>[] = [
     },
     {
         name: 'Phone Number',
-        selector: row => row.phone_number,
+        selector: row => row.phoneNumber,
     },
     {
         name: 'Mobile Number',
-        selector: row => row.mobile_number,
+        selector: row => row.mobileNumber,
     },
     {
         name: 'Vendor Email',
-        selector: row => row.vendor_email,
+        selector: row => row.vendorEmail,
     },
     {
         name: 'Vendor Sales Email',
-        selector: row => row.vendor_sales_email,
+        selector: row => row.vendorSalesEmail,
     },
     {
         name: 'Bank Account',
-        selector: row => row.bank_account_id,
+        selector: row => row.bankAccountId,
     },
     {
         name: 'Currency',
-        selector: row => row.currency_id,
-    },
-    {
-        name: 'Account Payable',
-        selector: row => row.account_payable,
-        sortable: true,
+        selector: row => row.currencyId,
     },
 ];
 
@@ -74,20 +70,20 @@ function Vendor() {
         let path: string = `detail/${row.id}`;
         navigate(path);
     }
-    
-    if (vendors !== undefined && vendors != null) {
-        return <DataTable columns={columns}
-                          data={vendors}
-                          pagination
-                          highlightOnHover
-                          pointerOnHover
-                          selectableRows
-                          selectableRowsHighlight
-                          onRowClicked={handleOnRowClicked}
-                          />;
-    }
 
-    return <h4>Records not found.</h4>
+    return <>
+        <InsertDataButton />
+        <DataTable columns={columns}
+                    data={vendors || []}
+                    pagination
+                    highlightOnHover
+                    pointerOnHover
+                    selectableRows
+                    selectableRowsHighlight
+                    onRowClicked={handleOnRowClicked}
+                    noDataComponent={"Data pemasok tidak ditemukan"}
+        />
+    </> 
 }
 
 export default Vendor;
