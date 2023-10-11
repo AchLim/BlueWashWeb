@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import IPurchaseOrder from '../models/IPurchaseOrder';
+import IReceipt from '../models/IReceipt';
 import DataTable, { TableColumn } from 'react-data-table-component';
 import moment from 'moment/moment';
 import { useNavigate } from 'react-router-dom';
+import InsertDataButton from '../InsertDataButton';
 
 
-const columns: TableColumn<IPurchaseOrder>[] = [
+const columns: TableColumn<IReceipt>[] = [
     {
         name: 'Name',
         selector: row => row.name,
@@ -45,42 +46,44 @@ const columns: TableColumn<IPurchaseOrder>[] = [
     },
 ];
 
-function PurchaseOrder() {
+function Receipt() {
     const navigate = useNavigate();
-    const [purchaseOrders, setPurchaseOrders] = useState<IPurchaseOrder[] | undefined>([]);
+    const [receipts, setReceipts] = useState<IReceipt[] | undefined>([]);
 
-    const fetchPurchaseOrderData = async () => {
-        const response = await fetch('https://localhost:44327/purchaseorder/all');
+    const fetchReceiptData = async () => {
+        const response = await fetch('https://localhost:44327/receipt/all');
         if (!response.ok) {
             throw new Error("Invalid response!");
         }
 
         const data = await response.json();
-        setPurchaseOrders(data);
+        setReceipts(data);
     }
 
     useEffect(() => {
-        fetchPurchaseOrderData().catch(console.error);
+        fetchReceiptData().catch(console.error);
     }, [])
 
-    const handleOnRowClicked = (row: IPurchaseOrder) => {
+    const handleOnRowClicked = (row: IReceipt) => {
         let path: string = `detail/${row.id}`;
         navigate(path);
     }
-    
-    if (purchaseOrders !== undefined && purchaseOrders != null) {
-        return <DataTable columns={columns}
-                          data={purchaseOrders}
-                          pagination
-                          highlightOnHover
-                          pointerOnHover
-                          selectableRows
-                          selectableRowsHighlight
-                          onRowClicked={handleOnRowClicked}
-                          />;
-    }
 
-    return <h4>Records not found.</h4>
+    
+
+    return <>
+        <InsertDataButton />
+        <DataTable columns={columns}
+                    data={receipts || []}
+                    pagination
+                    highlightOnHover
+                    pointerOnHover
+                    selectableRows
+                    selectableRowsHighlight
+                    onRowClicked={handleOnRowClicked}
+                    noDataComponent={"Data struk tidak ditemukan"}
+        />
+    </> 
 }
 
-export default PurchaseOrder;
+export default Receipt;

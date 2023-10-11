@@ -1,6 +1,6 @@
-interface IPurchaseOrderLine {
+interface IReceiptLine {
     id: number;
-    purchase_order_id: number;
+    receiptId: number;
     name: string;
     date: Date;
     description: string;
@@ -12,4 +12,4 @@ interface IPurchaseOrderLine {
     subTotal: number;
 }
 
-export default IPurchaseOrderLine;
+export default IReceiptLine;

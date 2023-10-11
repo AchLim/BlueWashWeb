@@ -8,7 +8,6 @@ import {
     Nav,
     NavItem,
     NavLink,
-    Button
 } from 'reactstrap';
 import './WebNavbar.css';
 
@@ -17,7 +16,7 @@ function WebNavbar() {
     const toggle = () => setIsOpen(!isOpen);
 
     return (
-        <Navbar color="light" expand="md">
+        <Navbar className="web-navbar" color="light" expand="md">
             <NavbarBrand tag={Link} to="/">Purchases Web</NavbarBrand>
             <NavbarToggler onClick={toggle} />
             <Collapse isOpen={isOpen} navbar>
@@ -26,7 +25,7 @@ function WebNavbar() {
                         <NavLink tag={Link} to="/dashboard">Dashboard</NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink tag={Link} to="/purchase_order">Purchase Order</NavLink>
+                        <NavLink tag={Link} to="/receipt">Receipt</NavLink>
                     </NavItem>
                     <NavItem>
                         <NavLink tag={Link} to="/vendor">Vendor</NavLink>

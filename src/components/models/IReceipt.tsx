@@ -1,9 +1,9 @@
-import IPurchaseOrderLine from "./IPurchaseOrderLine";
+import IReceiptLine from "./IReceiptLine";
 import moment from 'moment'
 import IVendor from "./IVendor";
 import ICurrency from "./ICurrency";
 
-interface IPurchaseOrder {
+interface IReceipt {
     id: number;
     name: string;
     vendor: IVendor;
@@ -16,7 +16,7 @@ interface IPurchaseOrder {
     purposeOfPurchase: string;
     totalAmount: number;
 
-    purchaseOrderLines: Array<IPurchaseOrderLine>;
+    receiptLines: Array<IReceiptLine>;
 }
 
-export default IPurchaseOrder;
+export default IReceipt;

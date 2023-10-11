@@ -1,20 +1,20 @@
 import React, {useEffect, useState} from 'react';
-import IPurchaseOrder from '../models/IPurchaseOrder';
+import IReceipt from '../models/IReceipt';
 import moment from 'moment/moment';
 import { useNavigate, useParams } from 'react-router-dom';
 
-function PurchaseOrderDetail() {
+function ReceiptDetail() {
     const params = useParams();
-    const [purchaseOrder, setPurchaseOrder] = useState<IPurchaseOrder[] | undefined>(undefined);
+    const [receipt, setReceipt] = useState<IReceipt | undefined>(undefined);
     const navigate = useNavigate();
 
-    let purchaseOrderId = params.id;
-    if (typeof purchaseOrderId === 'undefined') {
+    let ReceiptId = params.id;
+    if (typeof ReceiptId === 'undefined') {
         return <div>Invalid Request.</div>
     }
 
-    const fetchPurchaseOrderData = async () => {
-        const response = await fetch(`https://localhost:44327/purchaseorder/${encodeURIComponent(purchaseOrderId!)}`, {
+    const fetchReceiptData = async () => {
+        const response = await fetch(`https://localhost:44327/receipt/${encodeURIComponent(ReceiptId!)}`, {
             method: 'GET',
         });
 
@@ -23,15 +23,15 @@ function PurchaseOrderDetail() {
         }
 
         const data = await response.json();
-        setPurchaseOrder(data);
+        setReceipt(data);
     }
 
     useEffect(() => {
-        fetchPurchaseOrderData().catch(console.error);
+        fetchReceiptData().catch(console.error);
     }, [])
 
     
-    if (purchaseOrder !== undefined && purchaseOrder != null) {
+    if (receipt !== undefined && receipt != null) {
         return <div>
             <h4>
                 Hello!
@@ -42,4 +42,4 @@ function PurchaseOrderDetail() {
     return <h4>Records not found.</h4>
 }
 
-export default PurchaseOrderDetail;
+export default ReceiptDetail;
