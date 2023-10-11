@@ -3,6 +3,7 @@ import DataTable from '../DataTableBase';
 import {TableColumn} from 'react-data-table-component';
 import IBank from '../models/IBank';
 import { useNavigate } from 'react-router-dom';
+import InsertDataButton from '../InsertDataButton';
 
 
 const columns: TableColumn<IBank>[] = [
@@ -12,13 +13,6 @@ const columns: TableColumn<IBank>[] = [
         sortable: true,
     },
 ];
-
-const data: IBank[] = [
-    {
-        id: "47730541-1123-4518-b134-305df57df9e8",
-        name: 'BCA',
-    },
-]
 
 function Bank() {
     const navigate = useNavigate();
@@ -38,24 +32,24 @@ function Bank() {
         fetchBankData().catch(console.error);
     }, [])
 
-    const handleOnRowClicked = (row: IBank) => {
+    const HandleOnRowClicked = (row: IBank) => {
         let path: string = `detail/${row.id}`;
         navigate(path);
     }
-    
-    if (banks !== undefined && banks != null) {
-        return <DataTable columns={columns}
-                          data={banks}
-                          pagination
-                          highlightOnHover
-                          pointerOnHover
-                          selectableRows
-                          selectableRowsHighlight
-                          onRowClicked={handleOnRowClicked}
-                          />;
-    }
 
-    return <h4>Records not found.</h4>
+    return <>
+        <InsertDataButton />
+        <DataTable columns={columns}
+                        data={banks || []}
+                        pagination
+                        highlightOnHover
+                        pointerOnHover
+                        selectableRows
+                        selectableRowsHighlight
+                        onRowClicked={HandleOnRowClicked}
+                        noDataComponent={"Data bank tidak ditemukan"}
+        />
+    </>
 }
 
 export default Bank;
