@@ -50,13 +50,13 @@ const SideBar = () => {
         </Box>
         <Box>
           <Typography variant="overline" color={"text.disabled"}>
-            PURCASE
+            PURCHASE
           </Typography>
           <SideBarLinkButton icon={Home} linkTo={"/"}>
-            Purcase
+            Purchase
           </SideBarLinkButton>
           <SideBarLinkButton icon={Home} linkTo={"/"}>
-            Purcase Detail
+            Purchase Detail
           </SideBarLinkButton>
         </Box>
         <Box>
