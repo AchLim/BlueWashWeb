@@ -31,7 +31,7 @@ function WebNavbar() {
                         <NavLink tag={Link} to="/vendor">Vendor</NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink tag={Link} to="/bank">Bank</NavLink>
+                        <NavLink tag={Link} to="/currency">Currency</NavLink>
                     </NavItem>
                 </Nav>
             </Collapse>
