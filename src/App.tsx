@@ -1,27 +1,39 @@
-import { Route, Routes } from 'react-router-dom';
-import WebNavbar from './components/WebNavbar';
-import Currency from './components/pages/Currency';
-import CurrencyDetail from './components/pages/CurrencyDetail';
-// import BankInsert from './components/pages/BankInsert';
-
 import './App.css';
+import { Route, Routes } from "react-router-dom";
+// import WebNavbar from "./components/WebNavbar";
+// import Receipt from "./components/pages/Receipt";
+// import Vendor from "./components/pages/Vendor";
+// import Bank from "./components/pages/Bank";
+// import ReceiptDetail from "./components/pages/ReceiptDetail";
+// import ReceiptInsert from "./components/pages/ReceiptInsert";
+
+// import BankInsert from "./components/pages/BankInsert";
+// import BankDetail from "./components/pages/BankDetail";
+import SideBar from "./components/sidebar/SideBar";
+import { Box } from "@mui/material";
+import "./App.css";
+import "./assets/css/index.tsx";
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
 
 function App() {
   return (
-    <div>
-      <WebNavbar />
-      <div className='container-fluid'>
+    <Box>
+      {/* <WebNavbar /> */}
+      <SideBar />
+      <Box sx={{ pl: "300px" }}>
         <Routes>
           <Route path="/" element={<div>Dashboard</div>} />
           <Route path="/dashboard" element={<div>Dashboard</div>} />
-
           <Route path="/currency" element={<Currency />} />
           <Route path="/currency/detail/:id" element={<CurrencyDetail />} />
           {/* <Route path="/bank/insert" element={<BankInsert />} /> */}
         </Routes>
-      </div>
-    </div>
-  )
+      </Box>
+    </Box>
+  );
 }
 
-export default App
+export default App;
