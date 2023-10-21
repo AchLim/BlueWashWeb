@@ -27,8 +27,6 @@ function App() {
         <Routes>
           <Route path="/" element={<div>Dashboard</div>} />
           <Route path="/dashboard" element={<div>Dashboard</div>} />
-          <Route path="/currency" element={<Currency />} />
-          <Route path="/currency/detail/:id" element={<CurrencyDetail />} />
           {/* <Route path="/bank/insert" element={<BankInsert />} /> */}
         </Routes>
       </Box>
