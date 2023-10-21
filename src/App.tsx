@@ -1,3 +1,4 @@
+import './App.css';
 import { Route, Routes } from "react-router-dom";
 // import WebNavbar from "./components/WebNavbar";
 // import Receipt from "./components/pages/Receipt";
@@ -26,14 +27,9 @@ function App() {
         <Routes>
           <Route path="/" element={<div>Dashboard</div>} />
           <Route path="/dashboard" element={<div>Dashboard</div>} />
-          {/* <Route path="/receipt" element={<Receipt />} />
-          <Route path="/receipt/insert" element={<ReceiptInsert />} />
-          <Route path="/receipt/detail/:id" element={<ReceiptDetail />} />
-          <Route path="/vendor" element={<Vendor />} />
-
-          <Route path="/bank" element={<Bank />} />
-          <Route path="/bank/insert" element={<BankInsert />} />
-          <Route path="/bank/detail/:id" element={<BankDetail />} /> */}
+          <Route path="/currency" element={<Currency />} />
+          <Route path="/currency/detail/:id" element={<CurrencyDetail />} />
+          {/* <Route path="/bank/insert" element={<BankInsert />} /> */}
         </Routes>
       </Box>
     </Box>

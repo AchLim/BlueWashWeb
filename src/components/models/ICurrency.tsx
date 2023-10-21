@@ -1,7 +1,8 @@
 interface ICurrency {
-    id: number;
+    id: string;
     name: string;
-    abbreviation: string;
+    code: string;
+    cultureName: string;
 }
 
 export default ICurrency;
