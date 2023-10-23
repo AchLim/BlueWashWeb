@@ -1,18 +1,16 @@
 import { Box, Divider, Stack, Typography } from "@mui/material";
 import SideBarLinkButton from "./SideBarLinkButton";
-import { Home } from "@mui/icons-material";
+import {
+  Balance,
+  Home,
+  Inventory,
+  LocalShipping,
+  Person,
+} from "@mui/icons-material";
 
 const SideBar = () => {
   return (
-    <Box
-      position={"fixed"}
-      top={0}
-      bottom={0}
-      left={0}
-      width={"300px"}
-      p={3}
-      overflow={"auto"}
-    >
+    <Box p={3}>
       <Box
         display={"flex"}
         alignItems={"center"}
@@ -32,16 +30,16 @@ const SideBar = () => {
           <Typography variant="overline" color={"text.disabled"}>
             MASTER DATA
           </Typography>
-          <SideBarLinkButton icon={Home} linkTo={"/"}>
+          <SideBarLinkButton icon={Balance} linkTo={"/"}>
             Chart of Accounts
           </SideBarLinkButton>
-          <SideBarLinkButton icon={Home} linkTo={"/"}>
+          <SideBarLinkButton icon={Person} linkTo={"/"}>
             Customer
           </SideBarLinkButton>
-          <SideBarLinkButton icon={Home} linkTo={"/"}>
+          <SideBarLinkButton icon={Inventory} linkTo={"/"}>
             Inventory
           </SideBarLinkButton>
-          <SideBarLinkButton icon={Home} linkTo={"/"}>
+          <SideBarLinkButton icon={LocalShipping} linkTo={"/"}>
             Supplier
           </SideBarLinkButton>
           <SideBarLinkButton icon={Home} linkTo={"/"}>
