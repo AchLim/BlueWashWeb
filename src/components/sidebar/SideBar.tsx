@@ -30,7 +30,10 @@ const SideBar = () => {
           <Typography variant="overline" color={"text.disabled"}>
             MASTER DATA
           </Typography>
-          <SideBarLinkButton icon={Balance} linkTo={"/"}>
+          <SideBarLinkButton
+            icon={Balance}
+            linkTo={"/master-data/chart-of-account-form"}
+          >
             Chart of Accounts
           </SideBarLinkButton>
           <SideBarLinkButton icon={Person} linkTo={"/"}>
