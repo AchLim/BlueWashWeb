@@ -9,16 +9,15 @@ import {
 } from "@mui/material";
 import Header from "../header/Header";
 import { Add, ArrowBack, ArrowForward } from "@mui/icons-material";
-
-const ChartOfAccountForm = () => {
+const CustomerForm = () => {
   return (
     <>
-      <Header title="Chart Of Accounts " />
+      <Header title="Customer " />
       <Box paddingBlock={1} marginBottom={3}>
         <Breadcrumbs aria-label="breadcrumb">
           <Typography color="text.disabled">pages</Typography>
           <Typography color="text.disabled">Master Data</Typography>
-          <Typography color="text.primary">Chart Of Account </Typography>
+          <Typography color="text.primary">Customer </Typography>
         </Breadcrumbs>
       </Box>
       <Stack
@@ -32,7 +31,6 @@ const ChartOfAccountForm = () => {
           <IconButton color={"primary"} size={"small"}>
             <Add fontSize="small" />
           </IconButton>
-
           <IconButton color={"primary"} size={"small"}>
             <ArrowBack fontSize="small" />
           </IconButton>
@@ -41,17 +39,9 @@ const ChartOfAccountForm = () => {
           </IconButton>
         </Box>
 
-        <TextField
-          required
-          label="Account Header No"
-          autoComplete="email"
-          size="small"
-          autoFocus
-        />
-
-        <TextField required label="Account Header Name" size="small" />
-        <TextField required label="Account No" size="small" />
-        <TextField required label="Account Name" size="small" />
+        <TextField required label="Customer Code" size="small" autoFocus />
+        <TextField required label="Customer Name" size="small" />
+        <TextField required label="Customer Address" size="small" />
         <Box display={"flex"}>
           <Box sx={{ marginRight: "auto" }}>
             <Button variant="outlined" color="warning">
@@ -69,4 +59,4 @@ const ChartOfAccountForm = () => {
   );
 };
 
-export default ChartOfAccountForm;
+export default CustomerForm;

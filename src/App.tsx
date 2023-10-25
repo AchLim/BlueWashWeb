@@ -11,6 +11,13 @@ import ContextProviders from "./components/contexts/ContextProviders.tsx";
 import ChartOfAccountForm from "./components/pages/ChartOfAccountForm.tsx";
 import AdminLayout from "./components/pages/AdminLayout.tsx";
 import LogIn from "./components/pages/LogIn.tsx";
+import CustomerForm from "./components/pages/CustomerForm.tsx";
+import SalesForm from "./components/pages/SalesForm.tsx";
+import InventoryForm from "./components/pages/InventoryForm.tsx";
+import SupplierForm from "./components/pages/SupplierForm.tsx";
+import SalesPaymentForm from "./components/pages/SalesPaymentForm.tsx";
+import PurcaseForm from "./components/pages/PurcaseForm.tsx";
+import GeneralJournalForm from "./components/pages/GeneralJournalForm.tsx";
 
 const App = () => {
   return (
@@ -25,9 +32,20 @@ const App = () => {
               path="chart-of-account-form"
               element={<ChartOfAccountForm />}
             />
-            <Route path="customer" element={<div>customer</div>} />
+            <Route path="customer-form" element={<CustomerForm />} />
+            <Route path="inventory-form" element={<InventoryForm />} />
+            <Route path="supplier-form" element={<SupplierForm />} />
           </Route>
-
+          <Route path="general-journal">
+            <Route index element={<GeneralJournalForm />} />
+          </Route>
+          <Route path="purcase">
+            <Route index element={<PurcaseForm />} />
+          </Route>
+          <Route path="sales">
+            <Route index element={<SalesForm />} />
+            <Route path="sales-payment-form" element={<SalesPaymentForm />} />
+          </Route>
           {/* <Route path="bank/insert" element={<BankInsert />} /> */}
         </Route>
       </Routes>

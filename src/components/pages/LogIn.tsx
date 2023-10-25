@@ -6,9 +6,6 @@ import {
   Checkbox,
   Container,
   FormControlLabel,
-  Grid,
-  Link,
-  Stack,
   TextField,
   Typography,
 } from "@mui/material";
@@ -30,7 +27,11 @@ const LogIn = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          paddingInline: 5,
+          paddingBlock: 3,
+          borderRadius: 3,
         }}
+        className="box-soft-shadow"
       >
         <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
           <Lock />
@@ -38,7 +39,7 @@ const LogIn = () => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
           <TextField
             margin="normal"
             required

@@ -6,13 +6,6 @@ const AdminLayout = () => {
   const isSideBarDisplay = useIsSideBarDisplay();
   return (
     <>
-      <div
-        style={{ position: "fixed", bottom: 0, right: 0 }}
-        className="findme"
-        onClick={() => console.log(isSideBarDisplay, "testestes")}
-      >
-        {isSideBarDisplay ? "true" : "false"}
-      </div>
       <Box>
         <Box
           position={"fixed"}
@@ -20,6 +13,8 @@ const AdminLayout = () => {
           bottom={0}
           width={300}
           overflow={"auto"}
+          bgcolor={"#f8f9fa"}
+          zIndex={1000}
           {...(isSideBarDisplay
             ? { sx: { left: { xs: "-300px", sm: 0 } } }
             : { sx: { left: { xs: 0, sm: "-300px" } } })}
@@ -29,9 +24,9 @@ const AdminLayout = () => {
         <Box
           {...(isSideBarDisplay
             ? { sx: { pl: { xs: 0, sm: "300px" } } }
-            : { sx: { pl: { xs: "300px", sm: 0 } } })}
+            : { sx: { pl: { xs: "0", sm: 0 } } })}
         >
-          <Container>
+          <Container sx={{ paddingBottom: 3 }}>
             <Outlet />
           </Container>
         </Box>

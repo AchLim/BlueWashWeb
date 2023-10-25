@@ -22,7 +22,7 @@ const SideBar = () => {
       <Divider variant="middle" />
       <Stack marginBlock={3} spacing={2}>
         <Box>
-          <SideBarLinkButton icon={Home} active>
+          <SideBarLinkButton icon={Home} linkTo={"/"} active>
             Dashboard
           </SideBarLinkButton>
         </Box>
@@ -36,38 +36,49 @@ const SideBar = () => {
           >
             Chart of Accounts
           </SideBarLinkButton>
-          <SideBarLinkButton icon={Person} linkTo={"/"}>
+          <SideBarLinkButton
+            icon={Person}
+            linkTo={"/master-data/customer-form"}
+          >
             Customer
           </SideBarLinkButton>
-          <SideBarLinkButton icon={Inventory} linkTo={"/"}>
+          <SideBarLinkButton
+            icon={Inventory}
+            linkTo={"/master-data/inventory-form"}
+          >
             Inventory
           </SideBarLinkButton>
-          <SideBarLinkButton icon={LocalShipping} linkTo={"/"}>
+          <SideBarLinkButton
+            icon={LocalShipping}
+            linkTo={"/master-data/supplier-form"}
+          >
             Supplier
           </SideBarLinkButton>
-          <SideBarLinkButton icon={Home} linkTo={"/"}>
-            Sales Payment
+        </Box>
+        <Box>
+          <Typography variant="overline" color={"text.disabled"}>
+            General Journal
+          </Typography>
+          <SideBarLinkButton icon={Home} linkTo={"/general-journal"}>
+            General Journal
           </SideBarLinkButton>
         </Box>
         <Box>
           <Typography variant="overline" color={"text.disabled"}>
             PURCHASE
           </Typography>
-          <SideBarLinkButton icon={Home} linkTo={"/"}>
+          <SideBarLinkButton icon={Home} linkTo={"/purcase"}>
             Purchase
-          </SideBarLinkButton>
-          <SideBarLinkButton icon={Home} linkTo={"/"}>
-            Purchase Detail
           </SideBarLinkButton>
         </Box>
         <Box>
           <Typography variant="overline" color={"text.disabled"}>
             SALES
           </Typography>
-          <SideBarLinkButton icon={Home} linkTo={"/"}>
+          <SideBarLinkButton icon={Home} linkTo={"/sales"}>
             Sales
           </SideBarLinkButton>
-          <SideBarLinkButton icon={Home} linkTo={"/"}>
+          <SideBarLinkButton icon={Home} linkTo={"/sales/sales-payment-form"}>
             Sales Payment
           </SideBarLinkButton>
         </Box>
