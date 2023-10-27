@@ -46,7 +46,7 @@ const SalesPaymentForm = () => {
           size="small"
           autoFocus
         />
-        <TextField required label="Reference Number" size="small" />
+        <TextField label="Reference Number" size="small" />
         <TextField required label="Amount" size="small" />
         <Box display={"flex"}>
           <Box sx={{ marginRight: "auto" }}>

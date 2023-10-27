@@ -16,13 +16,8 @@ const columns: GridColDef[] = [
     headerName: "No",
     width: 30,
   },
-  { field: "cbmItemNo", headerName: "cbm Item No", width: 170 },
+  { field: "itemNo", headerName: "Item No", width: 170 },
   { field: "itemName", headerName: "Item Name", width: 170 },
-  {
-    field: "itemPrice_msInventory",
-    headerName: "item Price ms Inventory",
-    width: 300,
-  },
   { field: "itemQuantity", headerName: "Item Price", width: 170 },
   { field: "itemPrice", headerName: "Item Quantity", width: 170 },
   { field: "subTotal", headerName: "Sub Total", width: 170 },
@@ -31,14 +26,22 @@ const columns: GridColDef[] = [
 const rows = [
   {
     id: 1,
-    cbmItemNo: "I002",
-    itemName: "PC Asiacom",
-    itemPrice_msInventory: "2850",
-    itemQuantity: 5,
-    itemPrice: 2565,
-    subTotal: 1282500,
+    itemNo: "I117",
+    itemName: "Bed Cover King",
+    itemQuantity: 1,
+    itemPrice: 43_900.00.toLocaleString("id-ID", { style: "currency", currency: "IDR" }),
+    subTotal: (1 * 43_900.00).toLocaleString("id-ID", { style: "currency", currency: "IDR" }),
   },
-];
+  {
+    id: 2,
+    itemNo: "I118",
+    itemName: "Bed Cover Queen",
+    itemQuantity: 1,
+    itemPrice: 39_900.00.toLocaleString("id-ID", { style: "currency", currency: "IDR" }),
+    subTotal: (1 * 39_900.00).toLocaleString("id-ID", { style: "currency", currency: "IDR" }),
+  },
+]
+
 const SalesForm = () => {
   return (
     <>
@@ -71,10 +74,10 @@ const SalesForm = () => {
 
         <TextField required label="Sales No" size="small" autoFocus />
         <TextField required label="Sales Date" size="small" />
-        <TextField required label="cmb Customer CC" size="small" />
-        <TextField required label="Customer Name" size="small" />
-        <TextField required label="Customer Address" size="small" />
-        <TextField required label="Description" size="small" />
+        <TextField required label="Customer Code" size="small" />
+        <TextField disabled label="Customer Name" size="small" />
+        <TextField disabled label="Customer Address" size="small" />
+        <TextField label="Description" size="small" />
         <Box display={"flex"}>
           <Box sx={{ marginRight: "auto" }}>
             <Button variant="outlined" color="warning">
