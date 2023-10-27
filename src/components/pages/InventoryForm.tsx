@@ -49,7 +49,6 @@ const InventoryForm = () => {
         />
 
         <TextField required label="Item Name" size="small" />
-        <TextField required label="Item Price" size="small" />
         <Box display={"flex"}>
           <Box sx={{ marginRight: "auto" }}>
             <Button variant="outlined" color="warning">
