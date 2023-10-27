@@ -42,11 +42,7 @@ const SideBarLinkButton = ({ children, icon: Icon, active, linkTo }: any) => {
           className="icon-soft-shadow side-bar-link-button-icon"
           {...(active
             ? { bgcolor: "primary.main", color: "common.white" }
-            : {
-                // sx: {
-                //   "&:hover": { bgcolor: "primary.main", color: "common.white" },
-                // },
-              })}
+            : { color: "primary.main" })}
         >
           <Icon sx={{ fontSize: 16 }} />
         </Box>
