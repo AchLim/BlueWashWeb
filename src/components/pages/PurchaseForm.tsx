@@ -16,13 +16,8 @@ const columns: GridColDef[] = [
     headerName: "No",
     width: 30,
   },
-  { field: "cbmItemNo", headerName: "cbm Item No", width: 170 },
+  { field: "itemNo", headerName: "Item No", width: 170 },
   { field: "itemName", headerName: "Item Name", width: 170 },
-  {
-    field: "itemPrice_msInventory",
-    headerName: "item Price ms Inventory",
-    width: 300,
-  },
   { field: "itemQuantity", headerName: "Item Price", width: 170 },
   { field: "itemPrice", headerName: "Item Quantity", width: 170 },
   { field: "subTotal", headerName: "Sub Total", width: 170 },
@@ -31,18 +26,17 @@ const columns: GridColDef[] = [
 const rows = [
   {
     id: 1,
-    cbmItemNo: "I002",
-    itemName: "PC Asiacom",
-    itemPrice_msInventory: "2850",
-    itemQuantity: 5,
-    itemPrice: 2565,
-    subTotal: 1282500,
+    itemNo: "I002",
+    itemName: "Deterjen Rinso",
+    itemQuantity: 20,
+    itemPrice: 55_000.00.toLocaleString("id-ID", { style: "currency", currency: "IDR" }),
+    subTotal: (20 * 55_000.00).toLocaleString("id-ID", { style: "currency", currency: "IDR" }),
   },
 ];
-const PurcaseForm = () => {
+const PurchaseForm = () => {
   return (
     <>
-      <Header title="Purcase " />
+      <Header title="Purchase " />
       <Box paddingBlock={1} marginBottom={3}>
         <Breadcrumbs aria-label="breadcrumb">
           <Typography color="text.disabled">pages</Typography>
@@ -68,10 +62,10 @@ const PurcaseForm = () => {
           </IconButton>
         </Box>
 
-        <TextField required label="Purcase No" size="small" autoFocus />
-        <TextField required label="Purcasse Date" size="small" />
-        <TextField required label="cmd Supplier Code" size="small" />
-        <TextField required label="Supplier Name" size="small" />
+        <TextField required label="Purchase No" size="small" autoFocus />
+        <TextField required label="Purchase Date" size="small" />
+        <TextField required label="Supplier Code" size="small" />
+        <TextField disabled label="Supplier Name" size="small" />
         <Box display={"flex"}>
           <Box sx={{ marginRight: "auto" }}>
             <Button variant="outlined" color="warning">
@@ -102,4 +96,4 @@ const PurcaseForm = () => {
   );
 };
 
-export default PurcaseForm;
+export default PurchaseForm;

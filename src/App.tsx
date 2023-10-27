@@ -16,7 +16,7 @@ import SalesForm from "./components/pages/SalesForm.tsx";
 import InventoryForm from "./components/pages/InventoryForm.tsx";
 import SupplierForm from "./components/pages/SupplierForm.tsx";
 import SalesPaymentForm from "./components/pages/SalesPaymentForm.tsx";
-import PurcaseForm from "./components/pages/PurcaseForm.tsx";
+import PurchaseForm from "./components/pages/PurchaseForm.tsx";
 import GeneralJournalForm from "./components/pages/GeneralJournalForm.tsx";
 
 const App = () => {
@@ -39,8 +39,8 @@ const App = () => {
           <Route path="general-journal">
             <Route index element={<GeneralJournalForm />} />
           </Route>
-          <Route path="purcase">
-            <Route index element={<PurcaseForm />} />
+          <Route path="purchase">
+            <Route index element={<PurchaseForm />} />
           </Route>
           <Route path="sales">
             <Route index element={<SalesForm />} />
