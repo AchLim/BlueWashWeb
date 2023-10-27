@@ -8,16 +8,25 @@ import {
   Person,
 } from "@mui/icons-material";
 
+import BlueWashLogo from "../../assets/img/Blue Wash Logo.png";
+
 const SideBar = () => {
   return (
     <Box p={3}>
-      <Box
+      <Box component={"img"}
         display={"flex"}
         alignItems={"center"}
         justifyContent={"center"}
         mb={3}
+        sx={{
+          height: 250,
+          width: 340,
+          maxHeight: { xs: 220, md: 175 },
+          maxWidth: { xs: 240, md: 238 },
+        }}
+        alt="Blue Wash Logo"
+        src={BlueWashLogo}
       >
-        LOGO
       </Box>
       <Divider variant="middle" />
       <Stack marginBlock={3} spacing={2}>
@@ -67,7 +76,7 @@ const SideBar = () => {
           <Typography variant="overline" color={"text.disabled"}>
             PURCHASE
           </Typography>
-          <SideBarLinkButton icon={Home} linkTo={"/purcase"}>
+          <SideBarLinkButton icon={Home} linkTo={"/purchase"}>
             Purchase
           </SideBarLinkButton>
         </Box>
