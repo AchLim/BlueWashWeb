@@ -11,28 +11,23 @@ import Header from "../header/Header";
 import { Add, ArrowBack, ArrowForward } from "@mui/icons-material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 const columns: GridColDef[] = [
-  {
-    field: "id",
-    headerName: "No",
-    width: 30,
-  },
-  { field: "accountHeader", headerName: "Account Header", width: 170 },
-  { field: "accountHeaderName", headerName: "Account Header Name", width: 170 },
   { field: "accountName", headerName: "Account Name", width: 170 },
+  { field: "debit", headerName: "Debit", width: 170 },
+  { field: "credit", headerName: "Credit", width: 170 },
 ];
 
 const rows = [
   {
     id: 1,
-    accountHeader: "100",
-    accountHeaderName: "asset",
-    accountName: "accounts receivable",
+    accountName: "Cash",
+    debit: 1_500_000_000.0.toLocaleString("id-ID", { style: "currency", currency: "IDR" }),
+    credit: 0.0.toLocaleString("id-ID", { style: "currency", currency: "IDR" }),
   },
   {
     id: 2,
-    accountHeader: "100",
-    accountHeaderName: "asset",
-    accountName: "inventory",
+    accountName: "Owner's Equity",
+    debit: 0.0.toLocaleString("id-ID", { style: "currency", currency: "IDR" }),
+    credit: 1_500_000_000.0.toLocaleString("id-ID", { style: "currency", currency: "IDR" }),
   },
 ];
 const GeneralJournalForm = () => {
@@ -67,8 +62,7 @@ const GeneralJournalForm = () => {
 
         <TextField required label="Transaction No" size="small" autoFocus />
         <TextField required label="Transaction Date" size="small" />
-        <TextField required label="Account No" size="small" />
-        <TextField required label="Description" size="small" />
+        <TextField label="Description" size="small" />
         <Box display={"flex"}>
           <Box sx={{ marginRight: "auto" }}>
             <Button variant="outlined" color="warning">
