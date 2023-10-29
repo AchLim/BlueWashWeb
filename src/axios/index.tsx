@@ -1,12 +1,34 @@
 import axios from "axios";
 
 const API = axios.create({
-    baseURL: 'http://localhost:5000',
+    baseURL: 'https://localhost:44327',
     headers: {
-        'Authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIxZmFmNGQwNC1iODNjLTRiODgtOWMxMS03MTRhM2NkZDIwNzYiLCJzdWIiOiJBRE1JTiIsImVtYWlsIjoiYmx1ZXdhc2guYWRtaW5AZXhhbXBsZS5jb20iLCJ1c2VyaWQiOiIyOTNjNWY1NC1lNGQ5LTQzZmYtMTlmYi0wOGRiZDI2YTc1ZWQiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiQURNSU4iLCJTVEFGRiIsIk1BTkFHRVIiXSwiZXhwIjoxNjk3OTE5NzE2LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjUyNTAiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjUxNzMvIn0.HVCi_FzjG_MXsZBklYlES6YdL2Ms5Tk-eDpromjz-MA",
-        'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8',
+        'Content-Type' : 'application/json; charset=UTF-8',
     }
 });
+
+const token = localStorage.getItem('token') ?? null;
+
+API.interceptors.request.use((request) => {
+    if (token) {
+        request.headers.Authorization = token;
+    }
+
+    return request;
+});
+
+interface ILogin {
+    login: string | undefined,
+    password: string | undefined
+}
+
+export const SignIn = ({ login, password }: ILogin) => API.post('/auth/login', {login, password});
+
+export const GetLaundryServices = () => API.get('/laundryservice/all');
+export const GetLaundryServiceById = (id: string) => API.get(`/laundryservice/${id}`);
+
+export const GetPriceMenus = () => API.get('/pricemenu/all');
+export const GetPriceMenuById = (id: string) => API.get(`/pricemenu/${id}`);
 
 export const GetCurrencies = () => API.get('/currency/all');
 
