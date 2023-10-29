@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { Lock } from "@mui/icons-material";
 import {
+  Alert,
   Avatar,
   Box,
   Button,
@@ -9,16 +11,39 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { SignIn } from "../../axios";
+import { useNavigate } from 'react-router-dom';
 
-const LogIn = () => {
+interface ILoginProp {
+  setToken: React.Dispatch<React.SetStateAction<string | null>>
+}
+
+const LogIn = ({setToken}: ILoginProp) => {
+  const [error, setError] = useState(false);
+  const navigate = useNavigate();
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
+
+    let login = data.get('login')?.toString();
+    let password = data.get('password')?.toString();
+
+    const fetchLaundryServices = async () => {
+        var response = await SignIn({login, password});
+        if (response.status == 200) {
+          var data = response.data;
+
+          localStorage.setItem('token', data);
+          setToken(data);
+        }
+    };
+
+    fetchLaundryServices().catch(() => {
+      setError(true);
     });
   };
+
   return (
     <Container component="main" maxWidth="xs">
       <Box
@@ -33,6 +58,11 @@ const LogIn = () => {
         }}
         className="box-soft-shadow"
       >
+
+        {
+          error &&
+          <Alert variant='outlined' severity='error' sx={{ m: 1 }}>Akun tidak valid.</Alert>
+        }
         <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
           <Lock />
         </Avatar>
@@ -44,10 +74,10 @@ const LogIn = () => {
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
+            id="login"
+            label="Login"
+            name="login"
+            autoComplete="login"
             autoFocus
           />
           <TextField
