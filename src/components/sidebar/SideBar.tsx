@@ -6,6 +6,10 @@ import {
   Inventory,
   LocalShipping,
   Person,
+  AccountBalanceWallet,
+  Receipt,
+  MenuBookRounded,
+  CategoryRounded
 } from "@mui/icons-material";
 
 import BlueWashLogo from "../../assets/img/Blue Wash Logo.png";
@@ -37,6 +41,17 @@ const SideBar = () => {
         </Box>
         <Box>
           <Typography variant="overline" color={"text.disabled"}>
+            Transaction
+          </Typography>
+          <SideBarLinkButton icon={Receipt} linkTo={"/transaction"}>
+            Transaksi
+          </SideBarLinkButton>
+          <SideBarLinkButton icon={AccountBalanceWallet} linkTo={"/expense"}>
+            Pengeluaran
+          </SideBarLinkButton>
+        </Box>
+        <Box>
+          <Typography variant="overline" color={"text.disabled"}>
             MASTER DATA
           </Typography>
           <SideBarLinkButton
@@ -49,19 +64,31 @@ const SideBar = () => {
             icon={Person}
             linkTo={"/master-data/customer-form"}
           >
-            Customer
-          </SideBarLinkButton>
-          <SideBarLinkButton
-            icon={Inventory}
-            linkTo={"/master-data/inventory-form"}
-          >
-            Inventory
+            Pelanggan
           </SideBarLinkButton>
           <SideBarLinkButton
             icon={LocalShipping}
             linkTo={"/master-data/supplier-form"}
           >
-            Supplier
+            Pemasok
+          </SideBarLinkButton>
+          <SideBarLinkButton
+            icon={Inventory}
+            linkTo={"/master-data/inventory-form"}
+          >
+            Persediaan
+          </SideBarLinkButton>
+          <SideBarLinkButton
+            icon={CategoryRounded}
+            linkTo={"/master-data/service-tree"}
+          >
+            Tipe Laundry
+          </SideBarLinkButton>
+          <SideBarLinkButton
+            icon={MenuBookRounded}
+            linkTo={"/master-data/price-menu-tree"}
+          >
+            Menu Harga
           </SideBarLinkButton>
         </Box>
         <Box>
@@ -69,7 +96,7 @@ const SideBar = () => {
             General Journal
           </Typography>
           <SideBarLinkButton icon={Home} linkTo={"/general-journal"}>
-            General Journal
+            Jurnal Umum
           </SideBarLinkButton>
         </Box>
         <Box>
@@ -77,7 +104,7 @@ const SideBar = () => {
             PURCHASE
           </Typography>
           <SideBarLinkButton icon={Home} linkTo={"/purchase"}>
-            Purchase
+            Pembelian
           </SideBarLinkButton>
         </Box>
         <Box>
@@ -85,10 +112,10 @@ const SideBar = () => {
             SALES
           </Typography>
           <SideBarLinkButton icon={Home} linkTo={"/sales"}>
-            Sales
+            Penjualan
           </SideBarLinkButton>
           <SideBarLinkButton icon={Home} linkTo={"/sales/sales-payment-form"}>
-            Sales Payment
+            Pembayaran Penjualan
           </SideBarLinkButton>
         </Box>
       </Stack>
