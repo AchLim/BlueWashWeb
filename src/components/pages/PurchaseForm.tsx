@@ -18,8 +18,8 @@ const columns: GridColDef[] = [
   },
   { field: "itemNo", headerName: "Item No", width: 170 },
   { field: "itemName", headerName: "Item Name", width: 170 },
-  { field: "itemQuantity", headerName: "Item Price", width: 170 },
-  { field: "itemPrice", headerName: "Item Quantity", width: 170 },
+  { field: "itemQuantity", headerName: "Item Quantity", width: 170 },
+  { field: "itemPrice", headerName: "Item Price", width: 170 },
   { field: "subTotal", headerName: "Sub Total", width: 170 },
 ];
 
