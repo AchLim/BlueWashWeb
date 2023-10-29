@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Route, Routes } from "react-router-dom";
 
 import "./App.css";
@@ -18,12 +19,22 @@ import SupplierForm from "./components/pages/SupplierForm.tsx";
 import SalesPaymentForm from "./components/pages/SalesPaymentForm.tsx";
 import PurchaseForm from "./components/pages/PurchaseForm.tsx";
 import GeneralJournalForm from "./components/pages/GeneralJournalForm.tsx";
+import PriceMenuTree from "./components/pages/PriceMenu/PriceMenuTree.tsx";
+import ServiceTree from "./components/pages/Service/ServiceTree.tsx";
+import ServiceForm from './components/pages/Service/ServiceForm.tsx';
 
 const App = () => {
+  const getToken = () => localStorage.getItem('token') ??  null;
+  const [token, setToken] = useState(getToken());
+
+  if (!token) {
+    return <LogIn setToken={setToken} />
+  }
+
   return (
     <ContextProviders>
       <Routes>
-        <Route path="admin-login" element={<LogIn />} />
+        <Route path="admin-login" element={<LogIn setToken={setToken} />} />
         <Route path="/" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="dashboard" element={<Dashboard />} />
@@ -35,6 +46,11 @@ const App = () => {
             <Route path="customer-form" element={<CustomerForm />} />
             <Route path="inventory-form" element={<InventoryForm />} />
             <Route path="supplier-form" element={<SupplierForm />} />
+            <Route path="price-menu-tree" element={<PriceMenuTree />} />
+            <Route path="service-tree">
+              <Route path='' element={<ServiceTree />} />
+              <Route path="detail/:id" element={<ServiceForm />} />
+            </Route>
           </Route>
           <Route path="general-journal">
             <Route index element={<GeneralJournalForm />} />
@@ -46,7 +62,6 @@ const App = () => {
             <Route index element={<SalesForm />} />
             <Route path="sales-payment-form" element={<SalesPaymentForm />} />
           </Route>
-          {/* <Route path="bank/insert" element={<BankInsert />} /> */}
         </Route>
       </Routes>
     </ContextProviders>
