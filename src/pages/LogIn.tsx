@@ -11,7 +11,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { SignIn } from "../../axios";
+import { SignIn } from "../axios";
 import { useNavigate } from 'react-router-dom';
 
 interface ILoginProp {

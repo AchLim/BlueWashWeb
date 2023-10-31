@@ -1,5 +1,5 @@
 import { Box, Breadcrumbs, Typography } from "@mui/material";
-import Header from "../header/Header";
+import Header from "../components/header/Header";
 
 const Dashboard = () => {
   return (

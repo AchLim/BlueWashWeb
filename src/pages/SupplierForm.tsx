@@ -7,7 +7,7 @@ import {
   Typography,
   IconButton,
 } from "@mui/material";
-import Header from "../header/Header";
+import Header from "../components/header/Header";
 import { Add, ArrowBack, ArrowForward } from "@mui/icons-material";
 const SupplierForm = () => {
   return (

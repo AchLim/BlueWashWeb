@@ -9,10 +9,10 @@ import {
     Typography,
     IconButton,
   } from "@mui/material";
-import Header from "../../header/Header";
+import Header from "../../components/header/Header";
 import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
-import IPriceMenu, { ProcessPriceMenuDisplayName } from "../../models/IPriceMenu";
-import { GetPriceMenus } from '../../../axios';
+import IPriceMenu from "../../components/models/IPriceMenu";
+import { GetPriceMenus } from '../../axios';
 
 const columns: GridColDef<IPriceMenu>[] = [
     { field: "name", headerName: "Nama", width: 170 },
@@ -32,9 +32,6 @@ const PriceMenuTree = () => {
             var response = await GetPriceMenus();
             
             var data: IPriceMenu[] = response.data;
-            data.map((priceMenu) => {
-                ProcessPriceMenuDisplayName(priceMenu);
-            })
             setPriceMenus(data);
         };
 

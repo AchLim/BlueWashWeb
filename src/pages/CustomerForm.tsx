@@ -7,17 +7,17 @@ import {
   Typography,
   IconButton,
 } from "@mui/material";
-import Header from "../header/Header";
+import Header from "../components/header/Header";
 import { Add, ArrowBack, ArrowForward } from "@mui/icons-material";
-const InventoryForm = () => {
+const CustomerForm = () => {
   return (
     <>
-      <Header title="Inventory " />
+      <Header title="Customer " />
       <Box paddingBlock={1} marginBottom={3}>
         <Breadcrumbs aria-label="breadcrumb">
           <Typography color="text.disabled">pages</Typography>
           <Typography color="text.disabled">Master Data</Typography>
-          <Typography color="text.primary">Inventory </Typography>
+          <Typography color="text.primary">Customer </Typography>
         </Breadcrumbs>
       </Box>
       <Stack
@@ -31,7 +31,6 @@ const InventoryForm = () => {
           <IconButton color={"primary"} size={"small"}>
             <Add fontSize="small" />
           </IconButton>
-
           <IconButton color={"primary"} size={"small"}>
             <ArrowBack fontSize="small" />
           </IconButton>
@@ -40,15 +39,9 @@ const InventoryForm = () => {
           </IconButton>
         </Box>
 
-        <TextField
-          required
-          label="Item No"
-          autoComplete="email"
-          size="small"
-          autoFocus
-        />
-
-        <TextField required label="Item Name" size="small" />
+        <TextField required label="Customer Code" size="small" autoFocus />
+        <TextField required label="Customer Name" size="small" />
+        <TextField required label="Customer Address" size="small" />
         <Box display={"flex"}>
           <Box sx={{ marginRight: "auto" }}>
             <Button variant="outlined" color="warning">
@@ -66,4 +59,4 @@ const InventoryForm = () => {
   );
 };
 
-export default InventoryForm;
+export default CustomerForm;

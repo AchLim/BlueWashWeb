@@ -7,21 +7,18 @@ import {
     Stack,
     TextField,
     Typography,
-    IconButton,
-    Toolbar,
     Checkbox,
   } from "@mui/material";
-import Header from "../../header/Header";
-import { Add, ArrowBack, ArrowForward } from "@mui/icons-material";
+import Header from "../../components/header/Header";
 import { DataGrid, GridCallbackDetails, GridColDef, GridEventListener, GridRowParams } from "@mui/x-data-grid";
-import ILaundryService, { ProcessLaundryServiceDisplayName } from '../../models/ILaundryService';
-import { GetLaundryServices } from '../../../axios';
+import ILaundryService from '../../components/models/ILaundryService';
+import { GetLaundryServices } from '../../axios';
 
 const columns: GridColDef<ILaundryService>[] = [
     { field: "name", headerName: "Nama Tipe", width: 350 },
-    { field: "wash", headerName: "Cuci", width: 160, renderCell: (params) => {return (<Checkbox checked={params.value} disabled />) } },
-    { field: "dry", headerName: "Kering", width: 160, renderCell: (params) => {return (<Checkbox checked={params.value} disabled />) } },
-    { field: "iron", headerName: "Setrika", width: 160, renderCell: (params) => {return (<Checkbox checked={params.value} disabled />) } },
+    { field: "laundryProcessWash", headerName: "Cuci", width: 160, renderCell: (params) => {return (<Checkbox checked={params.value} disabled />) } },
+    { field: "laundryProcessDry", headerName: "Kering", width: 160, renderCell: (params) => {return (<Checkbox checked={params.value} disabled />) } },
+    { field: "laundryProcessIron", headerName: "Setrika", width: 160, renderCell: (params) => {return (<Checkbox checked={params.value} disabled />) } },
 ];
 
 const ServiceTree = () => {
@@ -33,9 +30,6 @@ const ServiceTree = () => {
             var response = await GetLaundryServices();
             
             var data: ILaundryService[] = response.data;
-            data.map(services => {
-                ProcessLaundryServiceDisplayName(services);
-            });
             setLaundryServices(data);
         };
 

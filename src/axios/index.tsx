@@ -11,7 +11,7 @@ const token = localStorage.getItem('token') ?? null;
 
 API.interceptors.request.use((request) => {
     if (token) {
-        request.headers.Authorization = token;
+        request.headers.Authorization = `Bearer ${token}`;
     }
 
     return request;
@@ -26,6 +26,7 @@ export const SignIn = ({ login, password }: ILogin) => API.post('/auth/login', {
 
 export const GetLaundryServices = () => API.get('/laundryservice/all');
 export const GetLaundryServiceById = (id: string) => API.get(`/laundryservice/${id}`);
+export const UpdateLaundryService = (id: string, data: Object) => API.put(`/laundryservice/update/${id}`, data);
 
 export const GetPriceMenus = () => API.get('/pricemenu/all');
 export const GetPriceMenuById = (id: string) => API.get(`/pricemenu/${id}`);
@@ -33,3 +34,5 @@ export const GetPriceMenuById = (id: string) => API.get(`/pricemenu/${id}`);
 export const GetCurrencies = () => API.get('/currency/all');
 
 export const GetCurrencyById = (id: string) => API.get(`/currency/${id}`);
+
+export const GetCustomers = () => API.get('/customer/all');

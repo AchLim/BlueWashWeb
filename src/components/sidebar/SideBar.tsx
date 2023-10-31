@@ -43,11 +43,11 @@ const SideBar = () => {
           <Typography variant="overline" color={"text.disabled"}>
             Transaction
           </Typography>
-          <SideBarLinkButton icon={Receipt} linkTo={"/transaction"}>
-            Transaksi
+          <SideBarLinkButton icon={Receipt} linkTo={"/transaction-form"}>
+            Tambah Transaksi
           </SideBarLinkButton>
-          <SideBarLinkButton icon={AccountBalanceWallet} linkTo={"/expense"}>
-            Pengeluaran
+          <SideBarLinkButton icon={AccountBalanceWallet} linkTo={"/expense-form"}>
+            Tambah Pengeluaran
           </SideBarLinkButton>
         </Box>
         <Box>

@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import moment from 'moment/moment';
 import { useNavigate, useParams } from 'react-router-dom';
-import ICurrency from '../models/ICurrency';
+import ICurrency from '../components/models/ICurrency';
 
-import { GetCurrencyById } from '../../axios';
+import { GetCurrencyById } from '../components/../axios';
 
 function CurrencyDetail() {
     const params = useParams();

@@ -7,17 +7,18 @@ import {
   Typography,
   IconButton,
 } from "@mui/material";
-import Header from "../header/Header";
+import Header from "../components/header/Header";
 import { Add, ArrowBack, ArrowForward } from "@mui/icons-material";
-const CustomerForm = () => {
+
+const ChartOfAccountForm = () => {
   return (
     <>
-      <Header title="Customer " />
+      <Header title="Chart Of Accounts " />
       <Box paddingBlock={1} marginBottom={3}>
         <Breadcrumbs aria-label="breadcrumb">
           <Typography color="text.disabled">pages</Typography>
           <Typography color="text.disabled">Master Data</Typography>
-          <Typography color="text.primary">Customer </Typography>
+          <Typography color="text.primary">Chart Of Account </Typography>
         </Breadcrumbs>
       </Box>
       <Stack
@@ -31,6 +32,7 @@ const CustomerForm = () => {
           <IconButton color={"primary"} size={"small"}>
             <Add fontSize="small" />
           </IconButton>
+
           <IconButton color={"primary"} size={"small"}>
             <ArrowBack fontSize="small" />
           </IconButton>
@@ -39,9 +41,17 @@ const CustomerForm = () => {
           </IconButton>
         </Box>
 
-        <TextField required label="Customer Code" size="small" autoFocus />
-        <TextField required label="Customer Name" size="small" />
-        <TextField required label="Customer Address" size="small" />
+        <TextField
+          required
+          label="Account Header No"
+          autoComplete="email"
+          size="small"
+          autoFocus
+        />
+
+        <TextField required label="Account Header Name" size="small" />
+        <TextField required label="Account No" size="small" />
+        <TextField required label="Account Name" size="small" />
         <Box display={"flex"}>
           <Box sx={{ marginRight: "auto" }}>
             <Button variant="outlined" color="warning">
@@ -59,4 +69,4 @@ const CustomerForm = () => {
   );
 };
 
-export default CustomerForm;
+export default ChartOfAccountForm;
