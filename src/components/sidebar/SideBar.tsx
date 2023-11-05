@@ -62,13 +62,13 @@ const SideBar = () => {
           </SideBarLinkButton>
           <SideBarLinkButton
             icon={Person}
-            linkTo={"/master-data/customer-form"}
+            linkTo={"/master-data/customer-tree"}
           >
             Pelanggan
           </SideBarLinkButton>
           <SideBarLinkButton
             icon={LocalShipping}
-            linkTo={"/master-data/supplier-form"}
+            linkTo={"/master-data/supplier-tree"}
           >
             Pemasok
           </SideBarLinkButton>

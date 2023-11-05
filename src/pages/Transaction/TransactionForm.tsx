@@ -6,7 +6,13 @@ import {
 	TextField,
 	Typography,
 	IconButton,
-	Autocomplete,
+	Dialog,
+	DialogTitle,
+	DialogContent,
+	Snackbar,
+	Alert,
+	AlertProps,
+	Slide,
 } from "@mui/material";
 import Header from "../../components/header/Header";
 import { Add, ArrowBack, ArrowForward } from "@mui/icons-material";
@@ -16,8 +22,10 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import dayjs from "dayjs"
 import "dayjs/locale/id"
 import { useEffect, useState } from "react";
-import { GetCustomers } from "../../axios";
-import ICustomer from "../../components/models/ICustomer";
+import { GetCustomers, InsertCustomer } from "../../axios";
+import ICustomer, { EmptyCustomer } from "../../components/models/ICustomer";
+import InsertCustomerForm from "../Customer/InsertCustomerForm";
+import CustomerCreatableAutocompleteField from "../../components/creatable/CustomerCreatableAutocompleteField";
 
 const columns: GridColDef[] = [
 	{ field: "itemNo", headerName: "Item No", width: 170 },
@@ -37,16 +45,15 @@ const rows = [
 		subTotal: (20 * 55_000.00).toLocaleString("id-ID", { style: "currency", currency: "IDR" }),
 	},
 ];
+
 const TransactionForm = () => {
-	const [selectedCustomer, setSelectedCustomer] = useState<ICustomer>({
-		id: "",
-		customerName: "",
-		customerCode: "",
-		customerAddress: null,
-		currencyId: null,
-		currency: null
-	});
+	const [selectedCustomer, setSelectedCustomer] = useState<ICustomer>(EmptyCustomer);
 	const [customers, setCustomers] = useState<Array<ICustomer>>([]);
+
+	const [toggleCustomerForm, setToggleCustomerForm] = useState<boolean>(false);
+	const [newCustomer, setNewCustomer] = useState<ICustomer>(EmptyCustomer);
+	
+	const [snackbar, setSnackbar] = useState<Pick<AlertProps, 'children' | 'severity'> | null>(null);
 
 	useEffect(() => {
 
@@ -59,22 +66,12 @@ const TransactionForm = () => {
 		}
 
 		GetAllCustomers().catch(console.error);
-	}, [])
+	}, [selectedCustomer])
 
-	const HandleTransactionOnchange = (event: React.SyntheticEvent<Element, Event>, value: ICustomer | null) => {
-		if (value)
-			setSelectedCustomer(value);
-		else {
-			setSelectedCustomer({
-				id: "",
-				customerName: "",
-				customerCode: "",
-				customerAddress: null,
-				currencyId: null,
-				currency: null
-			});
-		}
-	};
+	const HandleCloseCustomerForm = () => {
+		setNewCustomer(EmptyCustomer);
+		setToggleCustomerForm(false);
+	}
 
 	return (
 		<>
@@ -107,19 +104,23 @@ const TransactionForm = () => {
 				<TextField required label="Purchase No" size="small" autoFocus />
 				<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="id">
 					<DatePicker label="Tanggal Transaksi" defaultValue={dayjs()} />
-				</LocalizationProvider> 
+				</LocalizationProvider>
 
-				<Autocomplete id="customerCode"
-					getOptionLabel={(customer) => `${customer.customerCode} ${customer.customerName}`}
-					options={customers}
-					noOptionsText="Data pelanggan kosong."
-					renderInput={(params) => <TextField {...params} label="Kode Pelanggan" />}
-					isOptionEqualToValue={(option, value) => {
-						return option.customerCode === value.customerCode
+				<CustomerCreatableAutocompleteField
+					fieldId="customerName"
+					fieldLabel="Nama Pelanggan"
+					optionList={customers}
+					customerValue={selectedCustomer}
+					setCustomerValue={setSelectedCustomer}
+					onSuccess={(createdCustomer) => {
+						setSnackbar({children: `Data pelanggan dengan nama ${createdCustomer.customerName} berhasil dibuat.`, severity: "success"})
 					}}
-					onChange={HandleTransactionOnchange} />
+					onError={(errorMessage) => {
+						setSnackbar({children: `${errorMessage}`, severity: "error"})
+					}}
+				/>
 
-				<TextField name="customerName" label="Nama Pelanggan" size="small" disabled value={selectedCustomer.customerName} />
+				<TextField name="customerCode" label="Kode Pelanggan" size="small" disabled value={selectedCustomer.customerCode	} />
 				<Box display={"flex"}>
 					<Box sx={{ marginRight: "auto" }}>
 						<Button variant="outlined" color="warning">
@@ -133,6 +134,7 @@ const TransactionForm = () => {
 					</Box>
 				</Box>
 			</Stack>
+
 			<Box className="box-soft-shadow" p={3} borderRadius={3} marginBottom={3}>
 				<DataGrid
 					rows={rows}
@@ -146,6 +148,52 @@ const TransactionForm = () => {
 					pageSizeOptions={[5, 10]}
 				/>
 			</Box>
+
+			<Dialog open={toggleCustomerForm} fullWidth maxWidth="md">
+				<DialogTitle>Tambah data pelanggan baru</DialogTitle>
+				<DialogContent>
+
+					<InsertCustomerForm
+						customer={newCustomer}
+						handleFieldChanges={(event) => {
+							setNewCustomer({
+								...newCustomer,
+								[event.target.name]: event.target.value,
+							})
+						}}
+						isEditMode={true}
+						onClickCancel={HandleCloseCustomerForm}
+						handleSubmit={async (event) => {
+							event.preventDefault();
+							HandleCloseCustomerForm();
+							
+							var response = await InsertCustomer(newCustomer);
+							if (response.status == 201) {
+								setSnackbar({ children: 'Data berhasil disimpan!', severity: 'success' });
+								setSelectedCustomer(response.data);
+							} else {
+								let data = response.data;
+								setSnackbar({ children: data.error, severity: 'error' });
+							}
+						}}
+						
+					/>
+				</DialogContent>
+			</Dialog>
+
+			{
+				!!snackbar && (
+					<Snackbar open
+						anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
+						key={'center' + 'bottom'}
+						onClose={() => setSnackbar(null)}
+						autoHideDuration={4000}
+						TransitionComponent={(props) => <Slide {...props} direction="up" />}
+					>
+						<Alert {...snackbar} onClose={() => setSnackbar(null)} sx={{ width: '100%' }} />
+					</Snackbar>
+				)
+			}
 		</>
 	);
 };

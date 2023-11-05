@@ -12,10 +12,9 @@ import ContextProviders from "./components/contexts/ContextProviders.tsx";
 import ChartOfAccountForm from "./pages/ChartOfAccountForm.tsx";
 import AdminLayout from "./pages/AdminLayout.tsx";
 import LogIn from "./pages/LogIn.tsx";
-import CustomerForm from "./pages/CustomerForm.tsx";
+import CustomerForm from "./pages/Customer/CustomerForm.tsx";
 import SalesForm from "./pages/SalesForm.tsx";
 import InventoryForm from "./pages/InventoryForm.tsx";
-import SupplierForm from "./pages/SupplierForm.tsx";
 import SalesPaymentForm from "./pages/SalesPaymentForm.tsx";
 import PurchaseForm from "./pages/PurchaseForm.tsx";
 import GeneralJournalForm from "./pages/GeneralJournalForm.tsx";
@@ -23,6 +22,9 @@ import PriceMenuTree from "./pages/PriceMenu/PriceMenuTree.tsx";
 import ServiceTree from "./pages/Service/ServiceTree.tsx";
 import ServiceForm from './pages/Service/ServiceForm.tsx';
 import TransactionForm from './pages/Transaction/TransactionForm.tsx';
+import CustomerTree from './pages/Customer/CustomerTree.tsx';
+import SupplierTree from './pages/Supplier/SupplierTree.tsx';
+import SupplierForm from "./pages/Supplier/SupplierForm.tsx";
 
 const App = () => {
 	const getToken = () => localStorage.getItem('token') ?? null;
@@ -47,9 +49,15 @@ const App = () => {
 							path="chart-of-account-form"
 							element={<ChartOfAccountForm />}
 						/>
-						<Route path="customer-form" element={<CustomerForm />} />
+						<Route path="customer-tree">
+							<Route path='' element={<CustomerTree />} />
+							<Route path="detail/:id" element={<CustomerForm />} />
+						</Route>
+						<Route path="supplier-tree">
+							<Route path='' element={<SupplierTree />} />
+							<Route path="detail/:id" element={<SupplierForm />} />
+						</Route>
 						<Route path="inventory-form" element={<InventoryForm />} />
-						<Route path="supplier-form" element={<SupplierForm />} />
 						<Route path="price-menu-tree" element={<PriceMenuTree />} />
 						<Route path="service-tree">
 							<Route path='' element={<ServiceTree />} />
