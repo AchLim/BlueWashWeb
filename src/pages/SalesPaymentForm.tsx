@@ -7,17 +7,18 @@ import {
   Typography,
   IconButton,
 } from "@mui/material";
-import Header from "../header/Header";
+import Header from "../components/header/Header";
 import { Add, ArrowBack, ArrowForward } from "@mui/icons-material";
-const SupplierForm = () => {
+
+const SalesPaymentForm = () => {
   return (
     <>
-      <Header title="Supplier" />
+      <Header title="Sales Payment " />
       <Box paddingBlock={1} marginBottom={3}>
         <Breadcrumbs aria-label="breadcrumb">
           <Typography color="text.disabled">pages</Typography>
           <Typography color="text.disabled">Master Data</Typography>
-          <Typography color="text.primary">Supplier</Typography>
+          <Typography color="text.primary">Sales Payment </Typography>
         </Breadcrumbs>
       </Box>
       <Stack
@@ -31,7 +32,6 @@ const SupplierForm = () => {
           <IconButton color={"primary"} size={"small"}>
             <Add fontSize="small" />
           </IconButton>
-
           <IconButton color={"primary"} size={"small"}>
             <ArrowBack fontSize="small" />
           </IconButton>
@@ -39,17 +39,15 @@ const SupplierForm = () => {
             <ArrowForward fontSize="small" />
           </IconButton>
         </Box>
-
         <TextField
           required
-          label="Supplier Code"
+          label="Sales No"
           autoComplete="email"
           size="small"
           autoFocus
         />
-
-        <TextField required label="Supplier Name" size="small" />
-        <TextField required label="Supplier Address" size="small" />
+        <TextField label="Reference Number" size="small" />
+        <TextField required label="Amount" size="small" />
         <Box display={"flex"}>
           <Box sx={{ marginRight: "auto" }}>
             <Button variant="outlined" color="warning">
@@ -67,4 +65,4 @@ const SupplierForm = () => {
   );
 };
 
-export default SupplierForm;
+export default SalesPaymentForm;

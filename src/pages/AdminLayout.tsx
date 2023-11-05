@@ -1,6 +1,6 @@
-import SideBar from "../sidebar/SideBar";
+import SideBar from "../components/sidebar/SideBar";
 import { Box, Container } from "@mui/material";
-import { useIsSideBarDisplay } from "../contexts/SideBarOpenContext.tsx";
+import { useIsSideBarDisplay } from "../components/contexts/SideBarOpenContext.tsx";
 import { Outlet } from "react-router-dom";
 const AdminLayout = () => {
   const isSideBarDisplay = useIsSideBarDisplay();

@@ -7,7 +7,7 @@ import {
   Typography,
   IconButton,
 } from "@mui/material";
-import Header from "../header/Header";
+import Header from "../components/header/Header";
 import { Add, ArrowBack, ArrowForward } from "@mui/icons-material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 const columns: GridColDef[] = [
@@ -18,29 +18,38 @@ const columns: GridColDef[] = [
   },
   { field: "itemNo", headerName: "Item No", width: 170 },
   { field: "itemName", headerName: "Item Name", width: 170 },
-  { field: "itemQuantity", headerName: "Item Price", width: 170 },
-  { field: "itemPrice", headerName: "Item Quantity", width: 170 },
+  { field: "itemQuantity", headerName: "Item Quantity", width: 170 },
+  { field: "itemPrice", headerName: "Item Price", width: 170 },
   { field: "subTotal", headerName: "Sub Total", width: 170 },
 ];
 
 const rows = [
   {
     id: 1,
-    itemNo: "I002",
-    itemName: "Deterjen Rinso",
-    itemQuantity: 20,
-    itemPrice: 55_000.00.toLocaleString("id-ID", { style: "currency", currency: "IDR" }),
-    subTotal: (20 * 55_000.00).toLocaleString("id-ID", { style: "currency", currency: "IDR" }),
+    itemNo: "I117",
+    itemName: "Bed Cover King",
+    itemQuantity: 1,
+    itemPrice: 43_900.00.toLocaleString("id-ID", { style: "currency", currency: "IDR" }),
+    subTotal: (1 * 43_900.00).toLocaleString("id-ID", { style: "currency", currency: "IDR" }),
   },
-];
-const PurchaseForm = () => {
+  {
+    id: 2,
+    itemNo: "I118",
+    itemName: "Bed Cover Queen",
+    itemQuantity: 1,
+    itemPrice: 39_900.00.toLocaleString("id-ID", { style: "currency", currency: "IDR" }),
+    subTotal: (1 * 39_900.00).toLocaleString("id-ID", { style: "currency", currency: "IDR" }),
+  },
+]
+
+const SalesForm = () => {
   return (
     <>
-      <Header title="Purchase " />
+      <Header title="Sales" />
       <Box paddingBlock={1} marginBottom={3}>
         <Breadcrumbs aria-label="breadcrumb">
           <Typography color="text.disabled">pages</Typography>
-          <Typography color="text.disabled">Purcase</Typography>
+          <Typography color="text.disabled">Sales</Typography>
         </Breadcrumbs>
       </Box>
       <Stack
@@ -54,6 +63,7 @@ const PurchaseForm = () => {
           <IconButton color={"primary"} size={"small"}>
             <Add fontSize="small" />
           </IconButton>
+
           <IconButton color={"primary"} size={"small"}>
             <ArrowBack fontSize="small" />
           </IconButton>
@@ -62,10 +72,12 @@ const PurchaseForm = () => {
           </IconButton>
         </Box>
 
-        <TextField required label="Purchase No" size="small" autoFocus />
-        <TextField required label="Purchase Date" size="small" />
-        <TextField required label="Supplier Code" size="small" />
-        <TextField disabled label="Supplier Name" size="small" />
+        <TextField required label="Sales No" size="small" autoFocus />
+        <TextField required label="Sales Date" size="small" />
+        <TextField required label="Customer Code" size="small" />
+        <TextField disabled label="Customer Name" size="small" />
+        <TextField disabled label="Customer Address" size="small" />
+        <TextField label="Description" size="small" />
         <Box display={"flex"}>
           <Box sx={{ marginRight: "auto" }}>
             <Button variant="outlined" color="warning">
@@ -96,4 +108,4 @@ const PurchaseForm = () => {
   );
 };
 
-export default PurchaseForm;
+export default SalesForm;
