@@ -29,17 +29,18 @@ const LogIn = ({setToken}: ILoginProp) => {
     let login = data.get('login')?.toString();
     let password = data.get('password')?.toString();
 
-    const fetchLaundryServices = async () => {
+    const fetchUser = async () => {
         var response = await SignIn({login, password});
         if (response.status == 200) {
           var data = response.data;
 
           localStorage.setItem('token', data);
           setToken(data);
+          navigate('/');
         }
     };
 
-    fetchLaundryServices().catch(() => {
+    fetchUser().catch(() => {
       setError(true);
     });
   };
