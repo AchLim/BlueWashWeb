@@ -13,6 +13,7 @@ import ICustomer, { EmptyCustomer } from '../../components/models/ICustomer';
 import { AlertProps } from 'reactstrap';
 import { GetCustomerById, UpdateCustomer } from '../../axios';
 import InsertCustomerForm from './InsertCustomerForm';
+import SnackBar from '../../components/snackbar/Snackbar';
 
 
 const CustomerForm = () => {
@@ -69,7 +70,7 @@ const CustomerForm = () => {
 			setSnackbar({ children: data.error, severity: 'error' });
 		}
 	}
-	
+
 	return (
 		<>
 			<Header title="Customer " />
@@ -90,19 +91,10 @@ const CustomerForm = () => {
 				isEditMode={isEditMode}
 			/>
 
-			{
-				!!snackbar && (
-					<Snackbar open
-						anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
-						key={'center' + 'bottom'}
-						onClose={() => setSnackbar(null)}
-						autoHideDuration={4000}
-						TransitionComponent={(props) => <Slide {...props} direction="up" />}
-					>
-						<Alert {...snackbar} onClose={() => setSnackbar(null)} sx={{ width: '100%' }} />
-					</Snackbar>
-				)
-			}
+			<SnackBar
+				snackbar={snackbar}
+				setSnackbar={setSnackbar}
+			/>
 		</>
 	);
 };

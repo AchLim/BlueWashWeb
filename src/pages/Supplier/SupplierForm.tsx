@@ -13,6 +13,7 @@ import ISupplier, { EmptySupplier } from '../../components/models/ISupplier';
 import { AlertProps } from 'reactstrap';
 import { GetSupplierById, UpdateSupplier } from '../../axios';
 import InsertSupplierForm from './InsertSupplierForm';
+import SnackBar from '../../components/snackbar/Snackbar';
 
 
 const SupplierForm = () => {
@@ -69,7 +70,7 @@ const SupplierForm = () => {
 			setSnackbar({ children: data.error, severity: 'error' });
 		}
 	}
-	
+
 	return (
 		<>
 			<Header title="Customer " />
@@ -90,19 +91,11 @@ const SupplierForm = () => {
 				isEditMode={isEditMode}
 			/>
 
-			{
-				!!snackbar && (
-					<Snackbar open
-						anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
-						key={'center' + 'bottom'}
-						onClose={() => setSnackbar(null)}
-						autoHideDuration={4000}
-						TransitionComponent={(props) => <Slide {...props} direction="up" />}
-					>
-						<Alert {...snackbar} onClose={() => setSnackbar(null)} sx={{ width: '100%' }} />
-					</Snackbar>
-				)
-			}
+
+			<SnackBar
+				snackbar={snackbar}
+				setSnackbar={setSnackbar}
+			/>
 		</>
 	);
 };

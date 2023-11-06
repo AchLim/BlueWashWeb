@@ -12,6 +12,8 @@ interface InsertCustomerFormProps {
     
     isEditMode: boolean;
     autoFocus?: boolean;
+
+    buttonDisabled?: boolean;
 }
 
 const InsertCustomerForm = (props: InsertCustomerFormProps) => {
@@ -39,12 +41,12 @@ const InsertCustomerForm = (props: InsertCustomerFormProps) => {
                     (
                         <Box display={"flex"}>
                             <Box>
-                                <Button type="submit" variant="contained" sx={{ marginRight: "1rem" }}>
+                                <Button type="submit" variant="contained" sx={{ marginRight: "1rem" }} disabled={props.buttonDisabled}>
                                     Save
                                 </Button>
                             </Box>
                             <Box>
-                                <Button variant='outlined' color='warning' onClick={props.onClickCancel}>
+                                <Button variant='outlined' color='warning' onClick={props.onClickCancel} disabled={props.buttonDisabled}>
                                     Cancel
                                 </Button>
                             </Box>

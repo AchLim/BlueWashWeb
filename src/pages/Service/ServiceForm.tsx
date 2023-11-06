@@ -22,6 +22,7 @@ import { Link, useParams } from "react-router-dom";
 import ILaundryService from '../../components/models/ILaundryService';
 import { GetLaundryServiceById, UpdateLaundryService } from '../../axios';
 import IPriceMenu from '../../components/models/IPriceMenu';
+import SnackBar from '../../components/snackbar/Snackbar';
 
 const columns: GridColDef<IPriceMenu>[] = [
 	{ field: "name", headerName: "Nama", width: 170 },
@@ -184,19 +185,11 @@ const ServiceForm = () => {
 						/>
 					</Box>)
 			}
-			{
-				!!snackbar && (
-					<Snackbar open
-						anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
-						key={'center' + 'bottom'}
-						onClose={() => setSnackbar(null)}
-						autoHideDuration={4000}
-						TransitionComponent={(props) => <Slide {...props} direction="up" />}
-					>
-						<Alert {...snackbar} onClose={() => setSnackbar(null)} sx={{ width: '100%' }} />
-					</Snackbar>
-				)
-			}
+            
+            <SnackBar
+                snackbar={snackbar}
+                setSnackbar={setSnackbar}
+            />
 		</>
 	);
 };
