@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import CreatableAutocompleteField from './CreatableAutocompleteField';
 import InsertCustomerForm from '../../pages/Customer/InsertCustomerForm';
 import ICustomer, { EmptyCustomer } from '../models/ICustomer';
-import { InsertCustomer } from '../../axios';
+import { INSERT_CUSTOMER_URL } from '../../axios';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 interface ICustomerCreatableAutocompleteFieldProps {
 
@@ -24,6 +25,8 @@ const CustomerFilter = createFilterOptions<ICustomer>();
 const CustomerCreatableAutocompleteField = (props: ICustomerCreatableAutocompleteFieldProps) => {
     const [newCustomer, setNewCustomer] = useState<ICustomer>(EmptyCustomer);
     const [openDialog, setOpenDialog] = useState<boolean>(false);
+
+    const axiosPrivate = useAxiosPrivate();
 
     const HandleCloseCustomerForm = () => {
         setNewCustomer(EmptyCustomer);
@@ -52,7 +55,7 @@ const CustomerCreatableAutocompleteField = (props: ICustomerCreatableAutocomplet
             }}
             autoCompleteFilterOptions={(options, params) => {
                 const filtered = CustomerFilter(options, params);
-                if (filtered.length === 0) {
+                if (filtered.length === 0 && params.inputValue.trim()) {
                     filtered.push({
                         ...EmptyCustomer(),
                         customerName: params.inputValue,
@@ -90,7 +93,7 @@ const CustomerCreatableAutocompleteField = (props: ICustomerCreatableAutocomplet
                 handleSubmit={async (event) => {
                     event.preventDefault();
     
-                    var response = await InsertCustomer(newCustomer);
+                    var response = await axiosPrivate.post(INSERT_CUSTOMER_URL(), newCustomer);
                     if (response.status == 201) {
                         HandleCloseCustomerForm();
                         props.setCustomerValue(response.data);
