@@ -6,9 +6,11 @@ import {
     Typography,
   } from "@mui/material";
 import Header from "../../components/header/Header";
-import { DataGrid, GridCallbackDetails, GridColDef, GridEventListener, GridRowParams } from "@mui/x-data-grid";
-import { GetSuppliers } from '../../axios';
+import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
+import { GET_SUPPLIERS_URL } from '../../axios';
 import ISupplier from '../../components/models/ISupplier';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import useSnackBar from '../../hooks/useSnackBar';
 
 const columns: GridColDef<ISupplier>[] = [
     { field: "supplierName", headerName: "Nama Pemasok", width: 190 },
@@ -19,13 +21,19 @@ const columns: GridColDef<ISupplier>[] = [
 const SupplierTree = () => {
     const navigate = useNavigate();
     const [suppliers, setSuppliers] = useState<Array<ISupplier>>([]);
+    
+    const axiosPrivate = useAxiosPrivate();
+    const { setSnackBar } = useSnackBar();
 
     useEffect(() => {
         const fetchSuppliers = async () => {
-            var response = await GetSuppliers();
-            
-            var data: ISupplier[] = response.data;
-            setSuppliers(data);
+            var response = await axiosPrivate.get(GET_SUPPLIERS_URL());
+            const data = response.data;
+            if (data.error) {
+                setSnackBar({ children: data.error, severity: 'error' })
+            } else {
+                setSuppliers(data);
+            }
         };
 
         fetchSuppliers().catch(console.error);

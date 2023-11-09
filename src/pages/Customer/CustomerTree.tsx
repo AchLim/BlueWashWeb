@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
     Box,
     Breadcrumbs,
     Button,
     Typography,
-    Snackbar,
-    Alert,
-    Slide,
 } from "@mui/material";
 import Header from "../../components/header/Header";
 import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
-import { GetCustomers, InsertCustomer } from '../../axios';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import ICustomer, { EmptyCustomer } from '../../components/models/ICustomer';
 import InsertCustomerForm from './InsertCustomerForm';
 import { AlertProps } from 'reactstrap';
-import SnackBar from '../../components/snackbar/Snackbar';
+import SnackBar from '../../components/SnackBar';
+import { GET_CUSTOMERS_URL, INSERT_CUSTOMER_URL } from '../../axios';
+import useSnackBar from '../../hooks/useSnackBar';
 
 const columns: GridColDef<ICustomer>[] = [
     { field: "customerName", headerName: "Nama Pelanggan", width: 190 },
@@ -24,23 +23,29 @@ const columns: GridColDef<ICustomer>[] = [
 ];
 
 const CustomerTree = () => {
-    const navigate = useNavigate();
     const [customers, setCustomers] = useState<Array<ICustomer>>([]);
 
     const [openForm, setOpenForm] = useState<boolean>(false);
     const [newCustomer, setNewCustomer] = useState<ICustomer>(EmptyCustomer);
+
     const [submitted, setSubmitted] = useState<boolean>(false);
-	const [snackbar, setSnackbar] = useState<Pick<AlertProps, 'children' | 'severity'> | null>(null);
+    const axiosPrivate = useAxiosPrivate();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { setSnackBar } = useSnackBar();
 
     useEffect(() => {
-        const fetchCustomers = async () => {
-            var response = await GetCustomers();
+        const getCustomers = async () => {
+            const response = await axiosPrivate.get(GET_CUSTOMERS_URL());
+            const data = response.data;
 
-            var data: ICustomer[] = response.data;
-            setCustomers(data);
-        };
+            if (data.error)
+                setSnackBar({ children: data.error, severity: 'error' });
+            else
+                setCustomers(response.data);
+        }
 
-        fetchCustomers().catch(console.error);
+        getCustomers();
     }, [])
 
     const HandleOnRowClicked = (params: GridRowParams<ICustomer>) => {
@@ -61,16 +66,16 @@ const CustomerTree = () => {
         if (!submitted) {
             setSubmitted(true);
 
-            var response = await InsertCustomer(newCustomer);
+            var response = await axiosPrivate.post(INSERT_CUSTOMER_URL(), newCustomer);
             if (response.status == 201) {
-                setSnackbar({ children: 'Data berhasil disimpan!', severity: 'success' });
+                setSnackBar({ children: 'Data berhasil disimpan!', severity: 'success' });
                 setTimeout(() => {
                     const createdCustomerId = response.data.id;
                     navigate(`detail/${createdCustomerId}`);
                 }, 1000);
             } else {
                 let data = response.data;
-                setSnackbar({ children: data.error, severity: 'error' });
+                setSnackBar({ children: data.error, severity: 'error' });
                 setSubmitted(false);
             }
         }
@@ -126,11 +131,6 @@ const CustomerTree = () => {
                     </>
                 )
             }
-            
-            <SnackBar
-                snackbar={snackbar}
-                setSnackbar={setSnackbar}
-            />
         </>
     );
 };

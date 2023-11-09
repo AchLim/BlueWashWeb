@@ -12,7 +12,9 @@ import {
 import Header from "../../components/header/Header";
 import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
 import IPriceMenu from "../../components/models/IPriceMenu";
-import { GetPriceMenus } from '../../axios';
+import { GET_PRICEMENUS_URL } from '../../axios';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import useSnackBar from '../../hooks/useSnackBar';
 
 const columns: GridColDef<IPriceMenu>[] = [
     { field: "name", headerName: "Nama", width: 170 },
@@ -26,16 +28,21 @@ const columns: GridColDef<IPriceMenu>[] = [
 const PriceMenuTree = () => {
     const navigate = useNavigate();
     const [priceMenus, setPriceMenus] = useState<IPriceMenu[]>([]);
+    const axiosPrivate = useAxiosPrivate();
+    const { setSnackBar } = useSnackBar();
 
     useEffect(() => {
-        const fetchLaundryServices = async () => {
-            var response = await GetPriceMenus();
-            
-            var data: IPriceMenu[] = response.data;
-            setPriceMenus(data);
+        const fetchPriceMenus = async () => {
+            const response = await axiosPrivate.get(GET_PRICEMENUS_URL());
+            const data = response.data;
+            if (data.error) {
+                setSnackBar({ children: data.error, severity: 'error' })
+            } else {
+                setPriceMenus(data);
+            }
         };
 
-        fetchLaundryServices().catch(console.error);
+        fetchPriceMenus().catch(console.error);
     }, [])
 
     const HandleOnRowClicked = (params: GridRowParams<IPriceMenu>) => {

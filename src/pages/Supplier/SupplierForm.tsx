@@ -3,17 +3,16 @@ import {
 	Box,
 	Breadcrumbs,
 	Typography,
-	Slide,
-	Alert,
-	Snackbar,
 } from "@mui/material";
 import Header from "../../components/header/Header";
 import { Link, useParams } from "react-router-dom";
 import ISupplier, { EmptySupplier } from '../../components/models/ISupplier';
 import { AlertProps } from 'reactstrap';
-import { GetSupplierById, UpdateSupplier } from '../../axios';
+import { GET_SUPPLIER_BY_ID_URL, UPDATE_SUPPLIER_URL } from '../../axios';
 import InsertSupplierForm from './InsertSupplierForm';
-import SnackBar from '../../components/snackbar/Snackbar';
+import SnackBar from '../../components/SnackBar';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import useSnackBar from '../../hooks/useSnackBar';
 
 
 const SupplierForm = () => {
@@ -21,7 +20,8 @@ const SupplierForm = () => {
 	const [supplier, setSupplier] = useState<ISupplier>(EmptySupplier);
 
 	const [isEditMode, setIsEditMode] = useState<boolean>(false);
-	const [snackbar, setSnackbar] = useState<Pick<AlertProps, 'children' | 'severity'> | null>(null);
+	const axiosPrivate = useAxiosPrivate();
+	const { setSnackBar } = useSnackBar();
 
 
 	let SupplierId = params.id;
@@ -31,10 +31,13 @@ const SupplierForm = () => {
 
 	useEffect(() => {
 		const fetchSupplier = async () => {
-			var response = await GetSupplierById(SupplierId!);
-
-			var data: ISupplier = response.data;
-			setSupplier(data);
+			var response = await axiosPrivate(GET_SUPPLIER_BY_ID_URL(SupplierId!));
+            const data = response.data;
+            if (data.error) {
+                setSnackBar({ children: data.error, severity: 'error' })
+            } else {
+                setSupplier(data);
+            }
 		};
 
 		fetchSupplier().catch(console.error);
@@ -60,14 +63,14 @@ const SupplierForm = () => {
 	const HandleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 
-		var response = await UpdateSupplier(SupplierId!, supplier);
-		if (response.status == 201) {
-			setSnackbar({ children: 'Data berhasil disimpan!', severity: 'success' });
-			setSupplier(response.data);
-			setIsEditMode(false);
+		var response = await axiosPrivate.put(UPDATE_SUPPLIER_URL(SupplierId!), supplier);
+		const data = response.data;
+		if (data.error) {
+			setSnackBar({ children: data.error, severity: 'error' })
 		} else {
-			let data = response.data;
-			setSnackbar({ children: data.error, severity: 'error' });
+			setSnackBar({ children: 'Data berhasil disimpan!', severity: 'success' });
+			setSupplier(data);
+			setIsEditMode(false);
 		}
 	}
 
@@ -89,12 +92,6 @@ const SupplierForm = () => {
 
 				supplier={supplier}
 				isEditMode={isEditMode}
-			/>
-
-
-			<SnackBar
-				snackbar={snackbar}
-				setSnackbar={setSnackbar}
 			/>
 		</>
 	);

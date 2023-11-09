@@ -9,10 +9,7 @@ import {
 	Dialog,
 	DialogTitle,
 	DialogContent,
-	Snackbar,
-	Alert,
 	AlertProps,
-	Slide,
 } from "@mui/material";
 import Header from "../../components/header/Header";
 import { Add, ArrowBack, ArrowForward } from "@mui/icons-material";
@@ -22,11 +19,13 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import dayjs from "dayjs"
 import "dayjs/locale/id"
 import { useEffect, useState } from "react";
-import { GetCustomers, InsertCustomer } from "../../axios";
+import { GET_CUSTOMERS_URL, INSERT_CUSTOMER_URL } from "../../axios";
 import ICustomer, { EmptyCustomer } from "../../components/models/ICustomer";
 import InsertCustomerForm from "../Customer/InsertCustomerForm";
 import CustomerCreatableAutocompleteField from "../../components/creatable/CustomerCreatableAutocompleteField";
-import SnackBar from "../../components/snackbar/Snackbar";
+import { useLocation, useNavigate } from "react-router-dom";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import useSnackBar from "../../hooks/useSnackBar";
 
 const columns: GridColDef[] = [
 	{ field: "itemNo", headerName: "Item No", width: 170 },
@@ -48,26 +47,26 @@ const rows = [
 ];
 
 const TransactionForm = () => {
+	const location = useLocation();
+	const navigate = useNavigate();
+    const axiosPrivate = useAxiosPrivate();
+
 	const [selectedCustomer, setSelectedCustomer] = useState<ICustomer>(EmptyCustomer);
 	const [customers, setCustomers] = useState<Array<ICustomer>>([]);
 
 	const [toggleCustomerForm, setToggleCustomerForm] = useState<boolean>(false);
 	const [newCustomer, setNewCustomer] = useState<ICustomer>(EmptyCustomer);
 	
-	const [snackbar, setSnackbar] = useState<Pick<AlertProps, 'children' | 'severity'> | null>(null);
+	const { setSnackBar } = useSnackBar();
 
-	useEffect(() => {
+    useEffect(() => {
+        const getCustomers = async () => {
+            const response = await axiosPrivate.get(GET_CUSTOMERS_URL());
+            setCustomers(response.data);
+        }
 
-		const GetAllCustomers = async () => {
-			let response = await GetCustomers();
-			if (response.status == 200) {
-				let data: Array<ICustomer> = response.data;
-				setCustomers(data);
-			}
-		}
-
-		GetAllCustomers().catch(console.error);
-	}, [selectedCustomer])
+        getCustomers().catch(console.error)
+    }, [selectedCustomer])
 
 	const HandleCloseCustomerForm = () => {
 		setNewCustomer(EmptyCustomer);
@@ -114,10 +113,10 @@ const TransactionForm = () => {
 					customerValue={selectedCustomer}
 					setCustomerValue={setSelectedCustomer}
 					onSuccess={(createdCustomer) => {
-						setSnackbar({children: `Data pelanggan dengan nama ${createdCustomer.customerName} berhasil dibuat.`, severity: "success"})
+						setSnackBar({children: `Data pelanggan dengan nama ${createdCustomer.customerName} berhasil dibuat.`, severity: "success"})
 					}}
 					onError={(errorMessage) => {
-						setSnackbar({children: `${errorMessage}`, severity: "error"})
+						setSnackBar({children: `${errorMessage}`, severity: "error"})
 					}}
 				/>
 
@@ -168,24 +167,20 @@ const TransactionForm = () => {
 							event.preventDefault();
 							HandleCloseCustomerForm();
 							
-							var response = await InsertCustomer(newCustomer);
-							if (response.status == 201) {
-								setSnackbar({ children: 'Data berhasil disimpan!', severity: 'success' });
-								setSelectedCustomer(response.data);
+							const response = await axiosPrivate.post(INSERT_CUSTOMER_URL(), newCustomer);
+							const data = response.data;
+
+							if (data.error) {
+								setSnackBar({ children: data.error, severity: 'error' });
 							} else {
-								let data = response.data;
-								setSnackbar({ children: data.error, severity: 'error' });
+								setSnackBar({ children: 'Data berhasil disimpan!', severity: 'success' });
+								setSelectedCustomer(response.data);
 							}
 						}}
 						
 					/>
 				</DialogContent>
 			</Dialog>
-
-            <SnackBar
-                snackbar={snackbar}
-                setSnackbar={setSnackbar}
-            />
 		</>
 	);
 };

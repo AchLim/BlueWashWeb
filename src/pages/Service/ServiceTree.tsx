@@ -3,16 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import {
     Box,
     Breadcrumbs,
-    Button,
-    Stack,
-    TextField,
     Typography,
     Checkbox,
   } from "@mui/material";
 import Header from "../../components/header/Header";
-import { DataGrid, GridCallbackDetails, GridColDef, GridEventListener, GridRowParams } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
 import ILaundryService from '../../components/models/ILaundryService';
-import { GetLaundryServices } from '../../axios';
+import { GET_LAUNDRYSERVICES_URL } from '../../axios';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import useSnackBar from '../../hooks/useSnackBar';
 
 const columns: GridColDef<ILaundryService>[] = [
     { field: "name", headerName: "Nama Tipe", width: 350 },
@@ -23,14 +22,20 @@ const columns: GridColDef<ILaundryService>[] = [
 
 const ServiceTree = () => {
     const navigate = useNavigate();
+    const axiosPrivate = useAxiosPrivate();
+    const { setSnackBar } = useSnackBar();
+    
     const [laundryServices, setLaundryServices] = useState<ILaundryService[]>([]);
 
     useEffect(() => {
         const fetchLaundryServices = async () => {
-            var response = await GetLaundryServices();
-            
-            var data: ILaundryService[] = response.data;
-            setLaundryServices(data);
+            var response = await axiosPrivate.get(GET_LAUNDRYSERVICES_URL());
+            const data = response.data;
+            if (data.error) {
+                setSnackBar({ children: data.error, severity: 'error' })
+            } else {
+                setLaundryServices(data);
+            }
         };
 
         fetchLaundryServices().catch(console.error);

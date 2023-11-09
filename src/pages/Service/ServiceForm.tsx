@@ -10,19 +10,16 @@ import {
 	Checkbox,
 	FormGroup,
 	FormControlLabel,
-	AlertProps,
-	Snackbar,
-	Alert,
-	Slide,
 } from "@mui/material";
 import Header from "../../components/header/Header";
 import { Add, ArrowBack, ArrowForward } from "@mui/icons-material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Link, useParams } from "react-router-dom";
 import ILaundryService from '../../components/models/ILaundryService';
-import { GetLaundryServiceById, UpdateLaundryService } from '../../axios';
+import { GET_LAUNDRYSERVICE_BY_ID_URL, UPDATE_LAUNDRYSERVICE_URL } from '../../axios';
 import IPriceMenu from '../../components/models/IPriceMenu';
-import SnackBar from '../../components/snackbar/Snackbar';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import useSnackBar from '../../hooks/useSnackBar';
 
 const columns: GridColDef<IPriceMenu>[] = [
 	{ field: "name", headerName: "Nama", width: 170 },
@@ -45,20 +42,25 @@ const ServiceForm = () => {
 	});
 
 	const [isEditMode, setIsEditMode] = useState<boolean>(false);
-	const [snackbar, setSnackbar] = useState<Pick<AlertProps, 'children' | 'severity'> | null>(null);
 
 
 	let LaundryServiceId = params.id;
 	if (typeof LaundryServiceId === 'undefined') {
 		return <div>Invalid request, please reload.</div>
 	}
+	
+    const axiosPrivate = useAxiosPrivate();
+    const { setSnackBar } = useSnackBar();
 
 	useEffect(() => {
 		const fetchLaundryService = async () => {
-			var response = await GetLaundryServiceById(LaundryServiceId!);
-
-			var data: ILaundryService = response.data;
-			setLaundryService(data);
+			var response = await axiosPrivate.get(GET_LAUNDRYSERVICE_BY_ID_URL(LaundryServiceId!));
+            const data = response.data;
+            if (data.error) {
+                setSnackBar({ children: data.error, severity: 'error' })
+            } else {
+                setLaundryService(data);
+            }
 		};
 
 		fetchLaundryService().catch(console.error);
@@ -91,12 +93,13 @@ const ServiceForm = () => {
 	const HandleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 
-		var response = await UpdateLaundryService(LaundryServiceId!, laundryService);
-		if (response.status == 201) {
-			setSnackbar({ children: 'Data berhasil disimpan!', severity: 'success' });
-			setLaundryService(response.data);
+		var response = await axiosPrivate.put(UPDATE_LAUNDRYSERVICE_URL(LaundryServiceId!), laundryService);
+		const data = response.data;
+		if (data.error) {
+			setSnackBar({ children: data.error, severity: 'error' })
 		} else {
-			setSnackbar({ children: 'Data gagal disimpan!', severity: 'error' });
+			setSnackBar({ children: 'Data berhasil disimpan!', severity: 'success' });
+			setLaundryService(data);
 		}
 
 		setIsEditMode(false);
@@ -185,11 +188,6 @@ const ServiceForm = () => {
 						/>
 					</Box>)
 			}
-            
-            <SnackBar
-                snackbar={snackbar}
-                setSnackbar={setSnackbar}
-            />
 		</>
 	);
 };

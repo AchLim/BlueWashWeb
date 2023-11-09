@@ -3,17 +3,14 @@ import {
 	Box,
 	Breadcrumbs,
 	Typography,
-	Slide,
-	Alert,
-	Snackbar,
 } from "@mui/material";
 import Header from "../../components/header/Header";
 import { Link, useParams } from "react-router-dom";
 import ICustomer, { EmptyCustomer } from '../../components/models/ICustomer';
-import { AlertProps } from 'reactstrap';
-import { GetCustomerById, UpdateCustomer } from '../../axios';
+import { GET_CUSTOMER_BY_ID_URL, UPDATE_CUSTOMER_URL } from '../../axios';
 import InsertCustomerForm from './InsertCustomerForm';
-import SnackBar from '../../components/snackbar/Snackbar';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import useSnackBar from '../../hooks/useSnackBar';
 
 
 const CustomerForm = () => {
@@ -21,7 +18,8 @@ const CustomerForm = () => {
 	const [customer, setCustomer] = useState<ICustomer>(EmptyCustomer);
 
 	const [isEditMode, setIsEditMode] = useState<boolean>(false);
-	const [snackbar, setSnackbar] = useState<Pick<AlertProps, 'children' | 'severity'> | null>(null);
+	const axiosPrivate = useAxiosPrivate();
+	const { setSnackBar } = useSnackBar();
 
 
 	let CustomerId = params.id;
@@ -31,7 +29,7 @@ const CustomerForm = () => {
 
 	useEffect(() => {
 		const fetchCustomer = async () => {
-			var response = await GetCustomerById(CustomerId!);
+			var response = await axiosPrivate.get(GET_CUSTOMER_BY_ID_URL(CustomerId!));
 
 			var data: ICustomer = response.data;
 			setCustomer(data);
@@ -60,14 +58,16 @@ const CustomerForm = () => {
 	const HandleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 
-		var response = await UpdateCustomer(CustomerId!, customer);
-		if (response.status == 201) {
-			setSnackbar({ children: 'Data berhasil disimpan!', severity: 'success' });
+		const response = await axiosPrivate.put(UPDATE_CUSTOMER_URL(CustomerId!), customer);
+
+		const data = response.data;
+
+		if (data.error) {
+			setSnackBar({ children: data.error, severity: 'error' });
+		} else {
+			setSnackBar({ children: 'Data berhasil disimpan!', severity: 'success' });
 			setCustomer(response.data);
 			setIsEditMode(false);
-		} else {
-			let data = response.data;
-			setSnackbar({ children: data.error, severity: 'error' });
 		}
 	}
 
@@ -89,11 +89,6 @@ const CustomerForm = () => {
 
 				customer={customer}
 				isEditMode={isEditMode}
-			/>
-
-			<SnackBar
-				snackbar={snackbar}
-				setSnackbar={setSnackbar}
 			/>
 		</>
 	);
