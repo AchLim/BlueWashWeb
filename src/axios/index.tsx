@@ -1,52 +1,54 @@
 import axios from "axios";
-import ILaundryService from "../components/models/ILaundryService";
-import ICustomer from "../components/models/ICustomer";
-import ISupplier from "../components/models/ISupplier";
 
-const API = axios.create({
-    baseURL: 'https://localhost:44327',
+const BASE_URL = 'https://localhost:44327';
+
+export default axios.create({
+    baseURL: BASE_URL,
     headers: {
         'Content-Type' : 'application/json; charset=UTF-8',
+        'Accept': 'application/json'
     },
-    validateStatus: (status) => {
+    validateStatus: () => {
         return true;
     }
-});
+})
 
-const token = localStorage.getItem('token') ?? null;
+export const axiosPrivate = axios.create({
+    baseURL: BASE_URL,
+    headers: {
+        'Content-Type' : 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+    },
+})
 
-API.interceptors.request.use((request) => {
-    if (token) {
-        request.headers.Authorization = `Bearer ${token}`;
-    }
+export const GET_LAUNDRYSERVICES_URL = () => '/laundry_service/all';
+export const GET_LAUNDRYSERVICE_BY_ID_URL = (id: string) => `/laundry_service/${id}`;
+export const INSERT_LAUNDRYSERVICE_URL = () => '/laundry_service/insert';
+export const UPDATE_LAUNDRYSERVICE_URL = (id: string) => `/laundry_service/update/${id}`;
+export const DELETE_LAUNDRYSERVICE_URL = (id: string) => `/laundry_service/delete/${id}`;
 
-    return request;
-});
+export const GET_PRICEMENUS_URL = () => '/price_menu/all';
+export const GET_PRICEMENU_BY_ID_URL = (id: string) => `/price_menu/${id}`;
+export const INSERT_PRICEMENU_URL = () => '/price_menu/insert';
+export const UPDATE_PRICEMENU_URL = (id: string) => `/price_menu/update/${id}`;
+export const DELETE_PRICEMENU_URL = (id: string) => `/price_menu/delete/${id}`;
 
-interface ILogin {
-    login: string | undefined,
-    password: string | undefined
-}
 
-export const SignIn = ({ login, password }: ILogin) => API.post('/auth/login', {login, password});
+export const GET_CURRENCIES_URL = () => '/currency/all';
+export const GET_CURRENCY_BY_ID_URL = (id: string) => `/currency/${id}`;
+export const INSERT_CURRENCY_URL = () => '/currency/insert';
+export const UPDATE_CURRENCY_URL = (id: string) => `/currency/update/${id}`;
+export const DELETE_CURRENCY_URL = (id: string) => `/currency/delete/${id}`;
 
-export const GetLaundryServices = () => API.get('/laundryservice/all');
-export const GetLaundryServiceById = (id: string) => API.get(`/laundryservice/${id}`);
-export const UpdateLaundryService = (id: string, data: ILaundryService) => API.put(`/laundryservice/update/${id}`, data);
+export const GET_CUSTOMERS_URL = () => '/customer/all';
+export const GET_CUSTOMER_BY_ID_URL = (id: string) => `/customer/${id}`;
+export const INSERT_CUSTOMER_URL = () => '/customer/insert';
+export const UPDATE_CUSTOMER_URL = (id: string) => `/customer/update/${id}`;
+export const DELETE_CUSTOMER_URL = (id: string) => `/customer/delete/${id}`;
 
-export const GetPriceMenus = () => API.get('/pricemenu/all');
-export const GetPriceMenuById = (id: string) => API.get(`/pricemenu/${id}`);
 
-export const GetCurrencies = () => API.get('/currency/all');
-
-export const GetCurrencyById = (id: string) => API.get(`/currency/${id}`);
-
-export const GetCustomers = () => API.get('/customer/all');
-export const GetCustomerById = (id: string) => API.get(`/customer/${id}`);
-export const InsertCustomer = (data: ICustomer) => API.post(`/customer/insert`, data);
-export const UpdateCustomer = (id: string, data: ICustomer) => API.put(`/customer/update/${id}`, data);
-
-export const GetSuppliers = () => API.get('/supplier/all');
-export const GetSupplierById = (id: string) => API.get(`/supplier/${id}`);
-export const InsertSupplier = (data: ISupplier) => API.post(`/supplier/insert`, data);
-export const UpdateSupplier = (id: string, data: ISupplier) => API.put(`/supplier/update/${id}`, data);
+export const GET_SUPPLIERS_URL = () => '/supplier/all';
+export const GET_SUPPLIER_BY_ID_URL = (id: string) => `/supplier/${id}`;
+export const INSERT_SUPPLIER_URL = () => '/supplier/insert';
+export const UPDATE_SUPPLIER_URL = (id: string) => `/supplier/update/${id}`;
+export const DELETE_SUPPLIER_URL = (id: string) => `/supplier/delete/${id}`;
