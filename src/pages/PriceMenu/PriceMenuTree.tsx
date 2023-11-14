@@ -9,9 +9,9 @@ import {
     Typography,
     IconButton,
   } from "@mui/material";
-import Header from "../../components/header/Header";
+import Header from "../../components/Header";
 import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
-import IPriceMenu from "../../components/models/IPriceMenu";
+import IPriceMenu from "../../models/IPriceMenu";
 import { GET_PRICEMENUS_URL } from '../../axios';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useSnackBar from '../../hooks/useSnackBar';

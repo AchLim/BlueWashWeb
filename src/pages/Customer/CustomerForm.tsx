@@ -4,9 +4,9 @@ import {
 	Breadcrumbs,
 	Typography,
 } from "@mui/material";
-import Header from "../../components/header/Header";
+import Header from "../../components/Header";
 import { Link, useParams } from "react-router-dom";
-import ICustomer, { EmptyCustomer } from '../../components/models/ICustomer';
+import ICustomer, { EmptyCustomer } from '../../models/ICustomer';
 import { GET_CUSTOMER_BY_ID_URL, UPDATE_CUSTOMER_URL } from '../../axios';
 import InsertCustomerForm from './InsertCustomerForm';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';

@@ -5,10 +5,10 @@ import {
     Breadcrumbs,
     Typography,
   } from "@mui/material";
-import Header from "../../components/header/Header";
+import Header from "../../components/Header";
 import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
 import { GET_SUPPLIERS_URL } from '../../axios';
-import ISupplier from '../../components/models/ISupplier';
+import ISupplier from '../../models/ISupplier';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useSnackBar from '../../hooks/useSnackBar';
 

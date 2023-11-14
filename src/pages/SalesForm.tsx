@@ -7,7 +7,7 @@ import {
   Typography,
   IconButton,
 } from "@mui/material";
-import Header from "../components/header/Header";
+import Header from "../components/Header";
 import { Add, ArrowBack, ArrowForward } from "@mui/icons-material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 const columns: GridColDef[] = [
@@ -48,7 +48,6 @@ const SalesForm = () => {
       <Header title="Sales" />
       <Box paddingBlock={1} marginBottom={3}>
         <Breadcrumbs aria-label="breadcrumb">
-          <Typography color="text.disabled">pages</Typography>
           <Typography color="text.disabled">Sales</Typography>
         </Breadcrumbs>
       </Box>
@@ -101,7 +100,7 @@ const SalesForm = () => {
               paginationModel: { page: 0, pageSize: 25 },
             },
           }}
-          pageSizeOptions={[5, 10]}
+          pageSizeOptions={[5, 25]}
         />
       </Box>
     </>

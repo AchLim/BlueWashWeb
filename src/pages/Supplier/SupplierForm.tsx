@@ -4,13 +4,11 @@ import {
 	Breadcrumbs,
 	Typography,
 } from "@mui/material";
-import Header from "../../components/header/Header";
+import Header from "../../components/Header";
 import { Link, useParams } from "react-router-dom";
-import ISupplier, { EmptySupplier } from '../../components/models/ISupplier';
-import { AlertProps } from 'reactstrap';
+import ISupplier, { EmptySupplier } from '../../models/ISupplier';
 import { GET_SUPPLIER_BY_ID_URL, UPDATE_SUPPLIER_URL } from '../../axios';
 import InsertSupplierForm from './InsertSupplierForm';
-import SnackBar from '../../components/SnackBar';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useSnackBar from '../../hooks/useSnackBar';
 

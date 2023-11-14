@@ -11,7 +11,7 @@ import {
 	DialogContent,
 	AlertProps,
 } from "@mui/material";
-import Header from "../../components/header/Header";
+import Header from "../../components/Header";
 import { Add, ArrowBack, ArrowForward } from "@mui/icons-material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
@@ -20,9 +20,9 @@ import dayjs from "dayjs"
 import "dayjs/locale/id"
 import { useEffect, useState } from "react";
 import { GET_CUSTOMERS_URL, INSERT_CUSTOMER_URL } from "../../axios";
-import ICustomer, { EmptyCustomer } from "../../components/models/ICustomer";
+import ICustomer, { EmptyCustomer } from "../../models/ICustomer";
 import InsertCustomerForm from "../Customer/InsertCustomerForm";
-import CustomerCreatableAutocompleteField from "../../components/creatable/CustomerCreatableAutocompleteField";
+import CustomerCreatableAutocompleteField from "../../components/CustomerCreatableAutocompleteField";
 import { useLocation, useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import useSnackBar from "../../hooks/useSnackBar";
@@ -101,7 +101,7 @@ const TransactionForm = () => {
 					</IconButton>
 				</Box>
 
-				<TextField required label="Purchase No" size="small" autoFocus />
+				<TextField required label="Nomor Transaksi" size="small" autoFocus />
 				<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="id">
 					<DatePicker label="Tanggal Transaksi" defaultValue={dayjs()} />
 				</LocalizationProvider>
@@ -145,7 +145,7 @@ const TransactionForm = () => {
 							paginationModel: { page: 0, pageSize: 25 },
 						},
 					}}
-					pageSizeOptions={[5, 10]}
+					pageSizeOptions={[5, 25]}
 				/>
 			</Box>
 

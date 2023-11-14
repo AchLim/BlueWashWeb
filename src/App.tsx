@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Route, Routes } from "react-router-dom";
 
 import "./App.css";
@@ -8,15 +7,12 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import Dashboard from "./pages/Dashboard.tsx";
-import ContextProviders from "./components/contexts/ContextProviders.tsx";
-import ChartOfAccountForm from "./pages/ChartOfAccountForm.tsx";
-import AdminLayout from "./pages/AdminLayout.tsx";
+import Layout from './pages/Layout.tsx';
 import CustomerForm from "./pages/Customer/CustomerForm.tsx";
 import SalesForm from "./pages/SalesForm.tsx";
 import InventoryForm from "./pages/InventoryForm.tsx";
 import SalesPaymentForm from "./pages/SalesPaymentForm.tsx";
 import PurchaseForm from "./pages/PurchaseForm.tsx";
-import GeneralJournalForm from "./pages/GeneralJournalForm.tsx";
 import PriceMenuTree from "./pages/PriceMenu/PriceMenuTree.tsx";
 import ServiceTree from "./pages/Service/ServiceTree.tsx";
 import ServiceForm from './pages/Service/ServiceForm.tsx';
@@ -24,36 +20,47 @@ import TransactionForm from './pages/Transaction/TransactionForm.tsx';
 import CustomerTree from './pages/Customer/CustomerTree.tsx';
 import SupplierTree from './pages/Supplier/SupplierTree.tsx';
 import SupplierForm from "./pages/Supplier/SupplierForm.tsx";
-import { AuthProvider } from './components/contexts/AuthProvider.tsx';
 import Login from './pages/Login.tsx';
-import { SnackBarProvider } from './components/contexts/SnackBarProvider.tsx';
+import { AuthProvider } from './components/contexts/AuthContext.tsx';
+import { SnackBarProvider } from './components/contexts/SnackBarContext.tsx';
+import { SidebarToggleProvider } from './components/contexts/SidebarToggleContext.tsx';
+import RequiredAuth from './components/RequireAuth.tsx';
+import ChartOfAccountTree from "./pages/ChartOfAccount/ChartOfAccountTree.tsx";
+import ChartOfAccountForm from "./pages/ChartOfAccount/ChartOfAccountForm.tsx";
+import GeneralJournalTree from "./pages/GeneralJournal/GeneralJournalTree.tsx";
+import GeneralJournalForm from "./pages/GeneralJournal/GeneralJournalForm.tsx";
 
 const App = () => {
+
 	return (
 		<SnackBarProvider>
 			<AuthProvider>
-				<ContextProviders>
+				<SidebarToggleProvider>
 					<Routes>
-						<Route path="admin-login" element={<Login />} />
-						<Route path="/" element={<AdminLayout />}>
+						<Route path="login" element={<Login />} />
+						<Route path="/" element={<Layout />}>
 							<Route index element={<Dashboard />} />
 							<Route path="dashboard" element={<Dashboard />} />
-							<Route path="transaction-form">
+							<Route path="transaction-form" element={<RequiredAuth menuName='transaction' />}>
 								<Route path='' element={<TransactionForm />} />
 							</Route>
 							<Route path="master-data">
-								<Route
-									path="chart-of-account-form"
-									element={<ChartOfAccountForm />}
-								/>
-								<Route path="customer-tree">
+
+								<Route path="chart-of-account-tree" element={<RequiredAuth menuName='chart-of-account' />}>
+									<Route path='' element={<ChartOfAccountTree />} />
+									<Route path='detail/:id' element={<ChartOfAccountForm />} />
+								</Route>
+
+								<Route path="customer-tree" element={<RequiredAuth menuName='customer' />}>
 									<Route path='' element={<CustomerTree />} />
 									<Route path="detail/:id" element={<CustomerForm />} />
 								</Route>
-								<Route path="supplier-tree">
+
+								<Route path="supplier-tree" element={<RequiredAuth menuName='supplier' />}>
 									<Route path='' element={<SupplierTree />} />
 									<Route path="detail/:id" element={<SupplierForm />} />
 								</Route>
+
 								<Route path="inventory-form" element={<InventoryForm />} />
 								<Route path="price-menu-tree" element={<PriceMenuTree />} />
 								<Route path="service-tree">
@@ -61,8 +68,9 @@ const App = () => {
 									<Route path="detail/:id" element={<ServiceForm />} />
 								</Route>
 							</Route>
-							<Route path="general-journal">
-								<Route index element={<GeneralJournalForm />} />
+							<Route path="general-journal-tree" element={<RequiredAuth menuName='general-journal' />}>
+								<Route path='' element={<GeneralJournalTree />} />
+								<Route path='detail/:id' element={<GeneralJournalForm />} />
 							</Route>
 							<Route path="purchase">
 								<Route index element={<PurchaseForm />} />
@@ -77,7 +85,7 @@ const App = () => {
 							</Route>
 						</Route>
 					</Routes>
-				</ContextProviders>
+				</SidebarToggleProvider>
 			</AuthProvider>
 		</SnackBarProvider>
 	);

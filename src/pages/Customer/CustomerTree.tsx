@@ -4,12 +4,13 @@ import {
     Box,
     Breadcrumbs,
     Button,
+    Stack,
     Typography,
 } from "@mui/material";
-import Header from "../../components/header/Header";
+import Header from "../../components/Header";
 import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
-import ICustomer, { EmptyCustomer } from '../../components/models/ICustomer';
+import ICustomer, { EmptyCustomer } from '../../models/ICustomer';
 import InsertCustomerForm from './InsertCustomerForm';
 import { AlertProps } from 'reactstrap';
 import SnackBar from '../../components/SnackBar';
@@ -68,11 +69,9 @@ const CustomerTree = () => {
 
             var response = await axiosPrivate.post(INSERT_CUSTOMER_URL(), newCustomer);
             if (response.status == 201) {
+                const createdCustomerId = response.data.id;
                 setSnackBar({ children: 'Data berhasil disimpan!', severity: 'success' });
-                setTimeout(() => {
-                    const createdCustomerId = response.data.id;
-                    navigate(`detail/${createdCustomerId}`);
-                }, 1000);
+                navigate(`detail/${createdCustomerId}`);
             } else {
                 let data = response.data;
                 setSnackBar({ children: data.error, severity: 'error' });
@@ -87,7 +86,16 @@ const CustomerTree = () => {
             <Box paddingBlock={1} marginBottom={3}>
                 <Breadcrumbs aria-label="breadcrumb">
                     <Typography color="text.disabled">Master Data</Typography>
-                    <Typography color="text.primary">Pelanggan</Typography>
+                    {!openForm && <Typography color="text.primary">Pelanggan</Typography>}
+                    {openForm &&
+                        <Typography
+                            onClick={() => setOpenForm(false)}
+                            color="primary"
+                            sx={{ textDecoration: 'none', cursor: 'pointer' }}
+                        >
+                            Pelanggan
+                        </Typography>
+                    }
                     {openForm && <Typography color="text.primary">Form</Typography>}
                 </Breadcrumbs>
             </Box>
@@ -114,11 +122,23 @@ const CustomerTree = () => {
                             </Button>
                         </Box>
 
-                        <Box className="box-soft-shadow" p={3} borderRadius={3} marginBottom={3}>
+                        <Box className="box-soft-shadow" p={3} borderRadius={3} marginBottom={3} height={300}>
                             <DataGrid
                                 rows={customers}
                                 columns={columns}
                                 getRowId={(row) => row?.id}
+                                slots={{
+                                    noRowsOverlay: () => (
+                                        <Stack height="100%" alignItems={'center'} justifyContent={'center'}>
+                                            Data kosong.
+                                        </Stack>
+                                    ),
+                                    noResultsOverlay: () => (
+                                        <Stack height="100%" alignItems={'center'} justifyContent={'center'}>
+                                            Data tidak ditemukan.
+                                        </Stack>
+                                    )
+                                }}
                                 initialState={{
                                     pagination: {
                                         paginationModel: { page: 0, pageSize: 25 },

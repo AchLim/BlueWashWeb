@@ -1,5 +1,5 @@
 import { Box, Button, Stack, TextField } from "@mui/material"
-import ISupplier from "../../components/models/ISupplier";
+import ISupplier from "../../models/ISupplier";
 
 
 interface InsertSupplierFormProps {

@@ -7,7 +7,7 @@ import {
   Typography,
   IconButton,
 } from "@mui/material";
-import Header from "../components/header/Header";
+import Header from "../components/Header";
 import { Add, ArrowBack, ArrowForward } from "@mui/icons-material";
 const InventoryForm = () => {
   return (
@@ -15,7 +15,6 @@ const InventoryForm = () => {
       <Header title="Inventory " />
       <Box paddingBlock={1} marginBottom={3}>
         <Breadcrumbs aria-label="breadcrumb">
-          <Typography color="text.disabled">pages</Typography>
           <Typography color="text.disabled">Master Data</Typography>
           <Typography color="text.primary">Inventory </Typography>
         </Breadcrumbs>

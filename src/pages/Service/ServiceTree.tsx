@@ -6,9 +6,9 @@ import {
     Typography,
     Checkbox,
   } from "@mui/material";
-import Header from "../../components/header/Header";
+import Header from "../../components/Header";
 import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
-import ILaundryService from '../../components/models/ILaundryService';
+import ILaundryService from '../../models/ILaundryService';
 import { GET_LAUNDRYSERVICES_URL } from '../../axios';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useSnackBar from '../../hooks/useSnackBar';

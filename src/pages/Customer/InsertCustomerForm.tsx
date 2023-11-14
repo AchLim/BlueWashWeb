@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Box, Button, Stack, TextField } from "@mui/material";
-import ICustomer from "../../components/models/ICustomer";
+import ICustomer from "../../models/ICustomer";
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { DELETE_CUSTOMER_URL } from '../../axios';
 import useSnackBar from '../../hooks/useSnackBar';

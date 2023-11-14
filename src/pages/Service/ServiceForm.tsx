@@ -11,13 +11,13 @@ import {
 	FormGroup,
 	FormControlLabel,
 } from "@mui/material";
-import Header from "../../components/header/Header";
+import Header from "../../components/Header";
 import { Add, ArrowBack, ArrowForward } from "@mui/icons-material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Link, useParams } from "react-router-dom";
-import ILaundryService from '../../components/models/ILaundryService';
+import ILaundryService from '../../models/ILaundryService';
 import { GET_LAUNDRYSERVICE_BY_ID_URL, UPDATE_LAUNDRYSERVICE_URL } from '../../axios';
-import IPriceMenu from '../../components/models/IPriceMenu';
+import IPriceMenu from '../../models/IPriceMenu';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useSnackBar from '../../hooks/useSnackBar';
 
