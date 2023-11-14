@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import axios from "../axios";
 import { useLocation, useNavigate } from 'react-router-dom';
-import ILocationState from '../components/models/ILocationState';
+import ILocationState from '../models/ILocationState';
 import useAuth from '../hooks/useAuth';
 
 
@@ -34,23 +34,23 @@ const Login = () => {
 		let password = data.get('password')?.toString();
 
 		const fetchUser = async () => {
-			var response = await axios.post('/auth/login', { login, password });
-			if (response.status == 200) {
-				var data = response.data;
+			const response = await axios.post('/auth/login', { login, password });
 
+			const data = response.data;
+			if (data.error) {
+				setError(true);
+			} else {
+				const username = data.username;
 				const accessToken = data.accessToken;
-				const refreshToken = data.refreshToken;
+				
 				localStorage.setItem('accessToken', accessToken);
-				sessionStorage.setItem('refreshToken', refreshToken);
 
-				setAuth({ accessToken });
+				setAuth({ username, accessToken });
 				navigate(from, { replace: true });
 			}
 		};
 
-		fetchUser().catch(() => {
-			setError(true);
-		});
+		fetchUser().catch(console.error);
 	};
 
 	return (
