@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import moment from 'moment/moment';
 import { useNavigate, useParams } from 'react-router-dom';
-import ICurrency from '../components/models/ICurrency';
+import ICurrency from '../models/ICurrency';
 
-import { GetCurrencyById } from '../components/../axios';
+// import { GetCurrencyById } from '../components/../axios';
 
 function CurrencyDetail() {
     const params = useParams();
@@ -15,17 +15,17 @@ function CurrencyDetail() {
         return <div>Invalid Request.</div>
     }
 
-    useEffect(() => {
-        const fetchCurrency = async () => {
-            var response = await GetCurrencyById(CurrencyId!);
+    // useEffect(() => {
+    //     const fetchCurrency = async () => {
+    //         var response = await GetCurrencyById(CurrencyId!);
             
-            var data = response.data;
-            setCurrency(data);
-        };
+    //         var data = response.data;
+    //         setCurrency(data);
+    //     };
 
-        fetchCurrency().catch(console.error);
-        setIsLoading(false);
-    }, [])
+    //     fetchCurrency().catch(console.error);
+    //     setIsLoading(false);
+    // }, [])
 
     if (isLoading) {
         return <h4>Is Loading . . .</h4>
