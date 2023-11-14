@@ -12,18 +12,13 @@ interface InternalAxiosRequestConfigWithSent extends InternalAxiosRequestConfig 
 
 const useAxiosPrivate = () => {
     const refresh = useRefreshToken();
-    const { auth, setAuth } = useAuth();
+    const { auth } = useAuth();
     const { setSnackBar } = useSnackBar();
     const navigate = useNavigate();
     const location = useLocation();
     
     useEffect(() => {
-
         const accessToken = localStorage.getItem('accessToken') ?? '';
-
-        if (!auth.accessToken) {
-            setAuth({ accessToken })
-        }
 
         const requestIntercept = axiosPrivate.interceptors.request.use(
             config => {
@@ -57,7 +52,7 @@ const useAxiosPrivate = () => {
                     return axiosPrivate(prevRequest);
                 } else if (error?.response?.status === 401 && prevRequest?.sent) {
                     setSnackBar({ children: 'Gagal menghubungkan kembali, silahkan melakukan login.', severity: 'error' });
-                    navigate('/admin-login', { state: { from: location }, replace: true });
+                    navigate('/login', { state: { from: location }, replace: true });
                 } else if (error?.response?.status === 403) {
                     setSnackBar({ children: 'Tidak ada hak akses!', severity: 'error' });
                 }

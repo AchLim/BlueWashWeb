@@ -2,29 +2,23 @@ import axios from '../axios';
 import useAuth from './useAuth';
 
 interface ITokenData {
-    login: string;
+    username: string;
     accessToken: string;
-    refreshToken: string;
 }
 
 const useRefreshToken = () => {
     const { setAuth } = useAuth();
 
-    const refreshToken = sessionStorage.getItem('refreshToken') ?? '';
-
     const refresh = async () => {
-        const tokens = await axios.post('/auth/refresh-token', {
-            refreshToken
-        });
+        const tokens = await axios.get('/auth/refresh-token');
 
         const response: ITokenData = tokens.data;
+        const newUsername = response.username;
         const newAccessToken = response.accessToken;
-        const newRefreshToken = response.refreshToken;
 
         setAuth(prev => {
             localStorage.setItem('accessToken', newAccessToken)
-            sessionStorage.setItem('refreshToken', newRefreshToken)
-            return { ...prev, accessToken: newAccessToken };
+            return { ...prev, username: newUsername, accessToken: newAccessToken };
         });
 
         return newAccessToken;
