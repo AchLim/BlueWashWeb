@@ -59,11 +59,11 @@ export const UPDATE_CHART_OF_ACCOUNT_URL = (id: string) => `/chart-of-account/up
 export const DELETE_CHART_OF_ACCOUNT_URL = (id: string) => `/chart-of-account/delete/${id}`;
 
 
-export const GET_GENERAL_JOURNAL_HEADERS_URL = () => '/general-journal/header/all';
-export const GET_GENERAL_JOURNAL_HEADER_BY_ID_URL = (id: string) => `/general-journal/header/${id}`;
-export const INSERT_GENERAL_JOURNAL_HEADER_URL = () => '/general-journal/header/insert';
-export const UPDATE_GENERAL_JOURNAL_HEADER_URL = (id: string) => `/general-journal/header/update/${id}`;
-export const DELETE_GENERAL_JOURNAL_HEADER_URL = (id: string) => `/general-journal/header/delete/${id}`;
+export const GET_JOURNAL_ENTRIES = () => '/journal-entry/all';
+export const GET_JOURNAL_ENTRY_BY_ID = (id: string) => `/journal-entry/${id}`;
+export const INSERT_JOURNAL_ENTRY_URL = () => '/journal-entry/insert';
+export const UPDATE_JOURNAL_ENTRY_URL = (id: string) => `/journal-entry/update/${id}`;
+export const DELETE_JOURNAL_ENTRY_URL = (id: string) => `/journal-entry/delete/${id}`;
 
 
 export const GET_SUPPLIERS_URL = () => '/supplier/all';

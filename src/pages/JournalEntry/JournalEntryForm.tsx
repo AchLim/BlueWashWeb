@@ -4,13 +4,14 @@ import Header from "../../components/Header";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useSnackBar from '../../hooks/useSnackBar';
-import { GET_GENERAL_JOURNAL_HEADER_BY_ID_URL, UPDATE_GENERAL_JOURNAL_HEADER_URL } from '../../axios';
-import IGeneralJournalHeader, { EmptyGeneralJournal } from '../../models/IGeneralJournal';
-import InsertGeneralJournalForm from './InsertGeneralJournalForm';
+import { GET_JOURNAL_ENTRY_BY_ID, UPDATE_JOURNAL_ENTRY_URL } from '../../axios';
+import IJournalEntry, { EmptyJournalEntry } from '../../models/IJournalEntry';
+import InsertJournalEntryForm from './InsertJournalEntryForm';
+import { ConvertDateTimeToDate } from '../../utils/Converter';
 
-const GeneralJournalForm: React.FC = () => {
+const JournalEntryForm: React.FC = () => {
 	const { id } = useParams();
-	const [generalJournal, setGeneralJournal] = useState<IGeneralJournalHeader>(EmptyGeneralJournal);
+	const [journalEntry, setJournalEntry] = useState<IJournalEntry>(EmptyJournalEntry);
 	const [isEditMode, setIsEditMode] = useState<boolean>(false);
 	const axiosPrivate = useAxiosPrivate();
 	const { setSnackBar } = useSnackBar();
@@ -19,10 +20,10 @@ const GeneralJournalForm: React.FC = () => {
 
 	useEffect(() => {
 		const fetchGeneralJournal = async () => {
-			const response = await axiosPrivate.get(GET_GENERAL_JOURNAL_HEADER_BY_ID_URL(id!));
-			const data: IGeneralJournalHeader = response.data;
+			const response = await axiosPrivate.get(GET_JOURNAL_ENTRY_BY_ID(id!));
+			const data: IJournalEntry = response.data;
 			if (data) {
-				setGeneralJournal(data);
+				setJournalEntry(data);
 			} else {
 				navigate('/', { state: { from: location }, replace: true });
 				setSnackBar({ children: "Data yang terpilih tidak ditemukan.", severity: 'error' });
@@ -33,41 +34,41 @@ const GeneralJournalForm: React.FC = () => {
 	}, [id, isEditMode, axiosPrivate, navigate, location, setSnackBar]);
 
 	const onClickEdit = () => {
-		setGeneralJournal(generalJournal);
+		setJournalEntry(journalEntry);
 		setIsEditMode(true);
 	};
 
 	const onClickCancel = () => {
-		setGeneralJournal(generalJournal);
+		setJournalEntry(journalEntry);
 		setIsEditMode(false);
 	};
 
 	const handleChanges = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setGeneralJournal((prevState) => ({
-			...prevState,
+		setJournalEntry((prevJournalEntry) => ({
+			...prevJournalEntry,
 			[event.target.name]: event.target.value,
 		}));
 	};
 
 	const handleDateChanges = (value: Date | null) => {
 		const newValue = value || new Date();
-		setGeneralJournal((prevState) => ({
-			...prevState,
-			transactionDate: newValue
+		setJournalEntry((prevJournalEntry) => ({
+			...prevJournalEntry,
+			transactionDate: ConvertDateTimeToDate(newValue)
 		}));
 	};
 
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 
-		const response = await axiosPrivate.put(UPDATE_GENERAL_JOURNAL_HEADER_URL(id!), generalJournal);
+		const response = await axiosPrivate.put(UPDATE_JOURNAL_ENTRY_URL(id!), journalEntry);
 		const data = response.data;
 
 		if (data.error) {
 			setSnackBar({ children: data.error, severity: 'error' });
 		} else {
 			setSnackBar({ children: 'Data berhasil disimpan!', severity: 'success' });
-			setGeneralJournal(response.data);
+			setJournalEntry(response.data);
 			setIsEditMode(false);
 		}
 	};
@@ -79,22 +80,22 @@ const GeneralJournalForm: React.FC = () => {
 				<Breadcrumbs aria-label="breadcrumb">
 					<Typography color="text.disabled">Master Data</Typography>
 					<Typography component={Link} to={'../'} color="primary" sx={{ textDecoration: 'none' }}>Jurnal Umum</Typography>
-					<Typography>{generalJournal.transactionNo}</Typography>
+					<Typography>{journalEntry.transactionNo}</Typography>
 				</Breadcrumbs>
 			</Box>
 
-			<InsertGeneralJournalForm
+			<InsertJournalEntryForm
 				handleFieldChanges={handleChanges}
 				handleSubmit={handleSubmit}
 				handleDateFieldChanges={handleDateChanges}
 				onClickEdit={onClickEdit}
 				onClickCancel={onClickCancel}
-				generalJournal={generalJournal}
-				setGeneralJournal={setGeneralJournal}
+				journalEntry={journalEntry}
+				setJournalEntry={setJournalEntry}
 				isEditMode={isEditMode}
 			/>
 		</>
 	);
 };
 
-export default GeneralJournalForm;
+export default JournalEntryForm;

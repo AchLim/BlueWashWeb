@@ -27,8 +27,8 @@ import { SidebarToggleProvider } from './components/contexts/SidebarToggleContex
 import RequiredAuth from './components/RequireAuth.tsx';
 import ChartOfAccountTree from "./pages/ChartOfAccount/ChartOfAccountTree.tsx";
 import ChartOfAccountForm from "./pages/ChartOfAccount/ChartOfAccountForm.tsx";
-import GeneralJournalTree from "./pages/GeneralJournal/GeneralJournalTree.tsx";
-import GeneralJournalForm from "./pages/GeneralJournal/GeneralJournalForm.tsx";
+import JournalEntryTree from "./pages/JournalEntry/JournalEntryTree.tsx";
+import JournalEntryForm from "./pages/JournalEntry/JournalEntryForm.tsx";
 
 const App = () => {
 
@@ -68,9 +68,9 @@ const App = () => {
 									<Route path="detail/:id" element={<ServiceForm />} />
 								</Route>
 							</Route>
-							<Route path="general-journal-tree" element={<RequiredAuth menuName='general-journal' />}>
-								<Route path='' element={<GeneralJournalTree />} />
-								<Route path='detail/:id' element={<GeneralJournalForm />} />
+							<Route path="journal-entry-tree" element={<RequiredAuth menuName='general-journal' />}>
+								<Route path='' element={<JournalEntryTree />} />
+								<Route path='detail/:id' element={<JournalEntryForm />} />
 							</Route>
 							<Route path="purchase">
 								<Route index element={<PurchaseForm />} />

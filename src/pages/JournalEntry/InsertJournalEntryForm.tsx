@@ -20,33 +20,33 @@ import {
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { DataGrid, GridCellParams, GridColDef, GridRenderCellParams, GridValueFormatterParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRenderCellParams, GridValueFormatterParams } from '@mui/x-data-grid';
 import { Add, Delete, Edit } from '@mui/icons-material';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useSnackBar from '../../hooks/useSnackBar';
 import { useNavigate } from 'react-router-dom';
 import AlertDialogSlide from '../../components/AlertDialogSlide';
-import { DELETE_GENERAL_JOURNAL_HEADER_URL, GET_CHART_OF_ACCOUNTS_URL } from '../../axios';
-import IGeneralJournal, { EmptyGeneralJournalDetail, IGeneralJournalDetail } from '../../models/IGeneralJournal';
+import { DELETE_JOURNAL_ENTRY_URL, GET_CHART_OF_ACCOUNTS_URL } from '../../axios';
+import IJournalEntry, { EmptyJournalEntryDetail, IJournalItem } from '../../models/IJournalEntry';
 import IChartOfAccount, { EmptyChartOfAccount } from '../../models/IChartOfAccount';
 import { v4 as uuidv4 } from 'uuid';
 import id from 'date-fns/locale/id';
 import { format } from 'date-fns';
 
-interface InsertGeneralJournalFormProps {
+interface InsertJournalEntryFormProps {
     handleSubmit: (event: React.FormEvent<HTMLFormElement>) => Promise<void>;
     handleDateFieldChanges: (value: Date | null) => void;
     handleFieldChanges: (event: React.ChangeEvent<HTMLInputElement>) => void;
     onClickEdit?: () => void;
     onClickCancel: () => void;
-    generalJournal: IGeneralJournal;
-    setGeneralJournal: React.Dispatch<React.SetStateAction<IGeneralJournal>>;
+    journalEntry: IJournalEntry;
+    setJournalEntry: React.Dispatch<React.SetStateAction<IJournalEntry>>;
     isEditMode: boolean;
     autoFocus?: boolean;
     buttonDisabled?: boolean;
 }
 
-const InsertGeneralJournalForm = (props: InsertGeneralJournalFormProps) => {
+const InsertJournalEntryForm = (props: InsertJournalEntryFormProps) => {
     // Hooks
     const axiosPrivate = useAxiosPrivate();
     const { setSnackBar } = useSnackBar();
@@ -54,14 +54,14 @@ const InsertGeneralJournalForm = (props: InsertGeneralJournalFormProps) => {
 
     // New-detail related
     const [open, setOpen] = useState<boolean>(false)
-    const [newDetail, setNewDetail] = useState<IGeneralJournalDetail>(EmptyGeneralJournalDetail);
+    const [newItem, setNewItem] = useState<IJournalItem>(EmptyJournalEntryDetail);
 
     // Edit-selected related
     const [openEdit, setOpenEdit] = useState<boolean>(false);
-    const [selectedDetail, setSelectedDetail] = useState<IGeneralJournalDetail>(EmptyGeneralJournalDetail);
+    const [selectedItem, setSelectedItem] = useState<IJournalItem>(EmptyJournalEntryDetail);
 
-    // Delete Detail Line
-    const [openDeleteSelectedDetailDialog, setOpenDeleteSelectedDetailDialog] = useState<boolean>(false);
+    // Delete Item
+    const [openDeleteSelectedItemDialog, setOpenDeleteSelectedItemDialog] = useState<boolean>(false);
 
     // Chart of Accounts
     const [chartOfAccounts, setChartOfAccounts] = useState<Array<IChartOfAccount>>([]);
@@ -81,20 +81,20 @@ const InsertGeneralJournalForm = (props: InsertGeneralJournalFormProps) => {
     }, [axiosPrivate]);
 
     const handleOnClick = () => {
-        if (!props.generalJournal.id.trim()) {
+        if (!props.journalEntry.id.trim()) {
             return;
         }
         setOpenDeleteDialog(true);
     };
 
     const handleConfirmDelete = async () => {
-        const response = await axiosPrivate.delete(DELETE_GENERAL_JOURNAL_HEADER_URL(props.generalJournal.id));
+        const response = await axiosPrivate.delete(DELETE_JOURNAL_ENTRY_URL(props.journalEntry.id));
         const data = response.data;
 
         if (data.error) {
             setSnackBar({ children: data.error, severity: 'error' });
         } else {
-            navigate('/general-journal-tree');
+            navigate('/journal-entry-tree');
             setSnackBar({ children: 'Data berhasil dihapus.', severity: 'success' });
         }
 
@@ -116,30 +116,30 @@ const InsertGeneralJournalForm = (props: InsertGeneralJournalFormProps) => {
     const handleAddRow = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        const newDetailWithId = {
-            ...newDetail,
-            generalJournalDetailId: uuidv4(),
+        const newItemWithId = {
+            ...newItem,
+            journalItemId: uuidv4(),
         };
 
-        props.setGeneralJournal((prevHeader) => {
-            if (newDetail && newDetail.chartOfAccountId) {
+        props.setJournalEntry((prevHeader) => {
+            if (newItem && newItem.chartOfAccountId) {
                 return {
                     ...prevHeader,
-                    generalJournalDetails: prevHeader.generalJournalDetails.length > 0
-                        ? [...prevHeader.generalJournalDetails, ...[newDetailWithId]]
-                        : [newDetailWithId],
+                    journalItems: prevHeader.journalItems.length > 0
+                        ? [...prevHeader.journalItems, ...[newItemWithId]]
+                        : [newItemWithId],
                 };
             }
 
             return prevHeader;
         });
 
-        setNewDetail(EmptyGeneralJournalDetail());
+        setNewItem(EmptyJournalEntryDetail());
         handleCloseDialog();
     };
 
-    const handleNewDetailOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setNewDetail((prevState) => ({
+    const handleNewItemOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setNewItem((prevState) => ({
             ...prevState,
             [event.target.name]: event.target.value,
         }));
@@ -148,7 +148,7 @@ const InsertGeneralJournalForm = (props: InsertGeneralJournalFormProps) => {
     const handleSelectChartOfAccount = (event: SelectChangeEvent) => {
         const chartOfAccountId = event.target.value as string;
         const coaRecord = chartOfAccounts.find((coa) => coa.id === chartOfAccountId);
-        setNewDetail((prevState) => ({
+        setNewItem((prevState) => ({
             ...prevState,
             chartOfAccount: coaRecord || EmptyChartOfAccount(),
             chartOfAccountId: chartOfAccountId,
@@ -161,100 +161,100 @@ const InsertGeneralJournalForm = (props: InsertGeneralJournalFormProps) => {
 
     const handleCloseEditDialog = () => {
         setOpenEdit(false);
-        setSelectedDetail(EmptyGeneralJournalDetail());
+        setSelectedItem(EmptyJournalEntryDetail());
     }
 
     const handleEditRow = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        props.setGeneralJournal((prevHeader) => {
-            const updatedDetails = prevHeader.generalJournalDetails.map((detail) =>
-                detail.generalJournalDetailId === selectedDetail.generalJournalDetailId
-                    ? selectedDetail // Replace existing detail
+        props.setJournalEntry((prevHeader) => {
+            const updatedDetails = prevHeader.journalItems.map((detail) =>
+                detail.journalItemId === selectedItem.journalItemId
+                    ? selectedItem // Replace existing detail
                     : detail
             );
 
             return {
                 ...prevHeader,
-                generalJournalDetails:
-                    prevHeader.generalJournalDetails.length > 0
+                journalItems:
+                    prevHeader.journalItems.length > 0
                         ? updatedDetails
-                        : [selectedDetail], // Add new detail if the array is empty
+                        : [selectedItem], // Add new detail if the array is empty
             };
         });
 
-        setSelectedDetail(EmptyGeneralJournalDetail());
+        setSelectedItem(EmptyJournalEntryDetail());
         handleCloseEditDialog();
     };
 
-    const handleSelectedDetailOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSelectedDetail((prevState) => ({
+    const handleSelectedItemOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSelectedItem((prevState) => ({
             ...prevState,
             [event.target.name]: event.target.value,
         }));
     };
 
-    const handleSelectedDetailChartOfAccount = (event: SelectChangeEvent) => {
+    const handleSelectedItemChartOfAccount = (event: SelectChangeEvent) => {
         const chartOfAccountId = event.target.value as string;
         const coaRecord = chartOfAccounts.find((coa) => coa.id === chartOfAccountId);
-        setSelectedDetail((prevState) => ({
+        setSelectedItem((prevState) => ({
             ...prevState,
             chartOfAccount: coaRecord || EmptyChartOfAccount(),
             chartOfAccountId: chartOfAccountId,
         }));
     };
 
-    const handleOpenDeleteSelectedDetailDialog = () => {
-        setOpenDeleteSelectedDetailDialog(true);
+    const handleOpenDeleteSelectedItemDialog = () => {
+        setOpenDeleteSelectedItemDialog(true);
     }
 
-    const handleCloseDeleteSelectedDetailDialog = () => {
-        setOpenDeleteSelectedDetailDialog(false);
-        setSelectedDetail(EmptyGeneralJournalDetail());
+    const handleCloseDeleteSelectedItemDialog = () => {
+        setOpenDeleteSelectedItemDialog(false);
+        setSelectedItem(EmptyJournalEntryDetail());
     }
 
-    const handleEditGeneralJournalDetail = (generalJournalDetailId: string) => {
-        const selectedDetail = props.generalJournal.generalJournalDetails.find(d => d.generalJournalDetailId == generalJournalDetailId);
-        if (selectedDetail !== undefined) {
-            setSelectedDetail(selectedDetail)
+    const handleEditJournalEntryDetail = (journalItemId: string) => {
+        const selectedItem = props.journalEntry.journalItems.find(d => d.journalItemId == journalItemId);
+        if (selectedItem !== undefined) {
+            setSelectedItem(selectedItem)
             handleOpenEditDialog();
         } else {
             setSnackBar({ children: 'Data yang dipilih tidak ditemukan!', severity: 'error' });
         }
     }
 
-    const handleDeleteGeneralJournalDetail = (generalJournalDetailId: string) => {
-        const selectedDetail = props.generalJournal.generalJournalDetails.find(d => d.generalJournalDetailId == generalJournalDetailId);
-        if (selectedDetail !== undefined) {
-            setSelectedDetail(selectedDetail)
-            handleOpenDeleteSelectedDetailDialog();
+    const handleDeleteJournalEntryDetail = (journalItemId: string) => {
+        const selectedItem = props.journalEntry.journalItems.find(d => d.journalItemId == journalItemId);
+        if (selectedItem !== undefined) {
+            setSelectedItem(selectedItem)
+            handleOpenDeleteSelectedItemDialog();
         } else {
             setSnackBar({ children: 'Data yang dipilih tidak ditemukan!', severity: 'error' });
         }
     }
 
-    const handleConfirmDeleteSelectedDetail = () => {
-        const updatedHeaderData = props.generalJournal.generalJournalDetails.filter((detail) => detail.generalJournalDetailId !== selectedDetail.generalJournalDetailId);
+    const handleConfirmDeleteSelectedItem = () => {
+        const updatedHeaderData = props.journalEntry.journalItems.filter((detail) => detail.journalItemId !== selectedItem.journalItemId);
 
-        props.setGeneralJournal((prevHeader) => ({
+        props.setJournalEntry((prevHeader) => ({
             ...prevHeader,
-            generalJournalDetails: updatedHeaderData
+            journalItems: updatedHeaderData
         }));
 
-        setSelectedDetail(EmptyGeneralJournalDetail());
-        handleCloseDeleteSelectedDetailDialog();
+        setSelectedItem(EmptyJournalEntryDetail());
+        handleCloseDeleteSelectedItemDialog();
     }
 
     // Custom cell renderer for edit and delete buttons
     const renderEditDeleteCell = (params: GridRenderCellParams) => {
-        const { generalJournalDetailId } = params.row;
+        const { journalItemId } = params.row;
 
         return (
             <div>
                 <Button
                     sx={{ mr: 1 }}
                     startIcon={<Edit />}
-                    onClick={() => handleEditGeneralJournalDetail(generalJournalDetailId)}
+                    onClick={() => handleEditJournalEntryDetail(journalItemId)}
                     color="primary"
                     disabled={!props.isEditMode}
                 >
@@ -263,7 +263,7 @@ const InsertGeneralJournalForm = (props: InsertGeneralJournalFormProps) => {
                 <Button
                     sx={{ ml: 1 }}
                     startIcon={<Delete />}
-                    onClick={() => handleDeleteGeneralJournalDetail(generalJournalDetailId)}
+                    onClick={() => handleDeleteJournalEntryDetail(journalItemId)}
                     color="secondary"
                     disabled={!props.isEditMode}
                 >
@@ -273,7 +273,7 @@ const InsertGeneralJournalForm = (props: InsertGeneralJournalFormProps) => {
         );
     };
 
-    const columns: GridColDef<IGeneralJournalDetail>[] = [
+    const columns: GridColDef<IJournalItem>[] = [
         {
             field: "accountNo", headerName: "Kode Akun", width: 240, valueGetter: (params) => {
                 let displayName = '';
@@ -340,7 +340,7 @@ const InsertGeneralJournalForm = (props: InsertGeneralJournalFormProps) => {
                             label="Nomor Transaksi"
                             size="small"
                             name='transactionNo'
-                            value={props.generalJournal.transactionNo}
+                            value={props.journalEntry.transactionNo}
                             onChange={props.handleFieldChanges}
                             disabled={!props.isEditMode}
                         />
@@ -353,7 +353,7 @@ const InsertGeneralJournalForm = (props: InsertGeneralJournalFormProps) => {
                                         helperText: 'DD-MM-YYYY',
                                     },
                                 }}
-                                value={new Date(props.generalJournal.transactionDate)}
+                                value={new Date(props.journalEntry.transactionDate)}
                                 onChange={props.handleDateFieldChanges}
                                 disabled={!props.isEditMode}
                             />
@@ -362,7 +362,7 @@ const InsertGeneralJournalForm = (props: InsertGeneralJournalFormProps) => {
                         <TextField
                             label="Deskripsi"
                             name='description'
-                            value={props.generalJournal.description}
+                            value={props.journalEntry.description}
                             onChange={props.handleFieldChanges}
                             disabled={!props.isEditMode}
                         />
@@ -376,7 +376,7 @@ const InsertGeneralJournalForm = (props: InsertGeneralJournalFormProps) => {
                                     <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Nomor Transaksi</Typography>
                                 </Grid>
                                 <Grid item xs={12} md={9}>
-                                    <Typography variant="body1">{props.generalJournal.transactionNo}</Typography>
+                                    <Typography variant="body1">{props.journalEntry.transactionNo}</Typography>
                                 </Grid>
 
                                 <Grid item xs={12} md={3}>
@@ -384,7 +384,7 @@ const InsertGeneralJournalForm = (props: InsertGeneralJournalFormProps) => {
                                 </Grid>
                                 <Grid item xs={12} md={9}>
                                     <Typography variant="body1">
-                                        {format(new Date(props.generalJournal.transactionDate), 'dd-MM-yyyy')}
+                                        {format(new Date(props.journalEntry.transactionDate), 'dd-MM-yyyy')}
                                     </Typography>
                                 </Grid>
 
@@ -392,7 +392,7 @@ const InsertGeneralJournalForm = (props: InsertGeneralJournalFormProps) => {
                                     <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Deskripsi</Typography>
                                 </Grid>
                                 <Grid item xs={12} md={9}>
-                                    <Typography variant="body1">{props.generalJournal.description}</Typography>
+                                    <Typography variant="body1">{props.journalEntry.description}</Typography>
                                 </Grid>
                             </Grid>
                         )}
@@ -439,9 +439,9 @@ const InsertGeneralJournalForm = (props: InsertGeneralJournalFormProps) => {
                 </Button>
                 <Box marginTop={4}>
                     <DataGrid
-                        rows={props.generalJournal.generalJournalDetails}
+                        rows={props.journalEntry.journalItems}
                         columns={columns}
-                        getRowId={(row) => row?.generalJournalDetailId}
+                        getRowId={(row) => row?.journalItemId}
                         editMode='row'
                         autoHeight
                         slots={{
@@ -481,7 +481,7 @@ const InsertGeneralJournalForm = (props: InsertGeneralJournalFormProps) => {
                                     label="Kode Akun"
                                     size="small"
                                     name='chartOfAccountId'
-                                    value={newDetail.chartOfAccountId}
+                                    value={newItem.chartOfAccountId}
                                     onChange={handleSelectChartOfAccount}
                                 >
                                     {chartOfAccounts.map((value) => (
@@ -501,8 +501,8 @@ const InsertGeneralJournalForm = (props: InsertGeneralJournalFormProps) => {
                                     label="Debit"
                                     required
                                     type={'number'}
-                                    value={newDetail.debit}
-                                    onChange={handleNewDetailOnChange}
+                                    value={newItem.debit}
+                                    onChange={handleNewItemOnChange}
                                     disabled={!props.isEditMode}
                                 />
                             </FormControl>
@@ -516,8 +516,8 @@ const InsertGeneralJournalForm = (props: InsertGeneralJournalFormProps) => {
                                     label="Credit"
                                     required
                                     type={'number'}
-                                    value={newDetail.credit}
-                                    onChange={handleNewDetailOnChange}
+                                    value={newItem.credit}
+                                    onChange={handleNewItemOnChange}
                                     disabled={!props.isEditMode}
                                 />
                             </FormControl>
@@ -556,8 +556,8 @@ const InsertGeneralJournalForm = (props: InsertGeneralJournalFormProps) => {
                                     label="Kode Akun"
                                     size="small"
                                     name='chartOfAccountId'
-                                    value={selectedDetail.chartOfAccountId}
-                                    onChange={handleSelectedDetailChartOfAccount}
+                                    value={selectedItem.chartOfAccountId}
+                                    onChange={handleSelectedItemChartOfAccount}
                                 >
                                     {chartOfAccounts.map((value) => (
                                         <MenuItem key={value.id} value={value.id}>
@@ -576,8 +576,8 @@ const InsertGeneralJournalForm = (props: InsertGeneralJournalFormProps) => {
                                     label="Debit"
                                     required
                                     type={'number'}
-                                    value={selectedDetail.debit}
-                                    onChange={handleSelectedDetailOnChange}
+                                    value={selectedItem.debit}
+                                    onChange={handleSelectedItemOnChange}
                                     disabled={!props.isEditMode}
                                 />
                             </FormControl>
@@ -591,8 +591,8 @@ const InsertGeneralJournalForm = (props: InsertGeneralJournalFormProps) => {
                                     label="Credit"
                                     required
                                     type={'number'}
-                                    value={selectedDetail.credit}
-                                    onChange={handleSelectedDetailOnChange}
+                                    value={selectedItem.credit}
+                                    onChange={handleSelectedItemOnChange}
                                     disabled={!props.isEditMode}
                                 />
                             </FormControl>
@@ -624,9 +624,9 @@ const InsertGeneralJournalForm = (props: InsertGeneralJournalFormProps) => {
 
             {/* Delete Detail Confirmation Dialog */}
             <AlertDialogSlide
-                open={openDeleteSelectedDetailDialog}
-                onClose={handleCloseDeleteSelectedDetailDialog}
-                onConfirm={handleConfirmDeleteSelectedDetail}
+                open={openDeleteSelectedItemDialog}
+                onClose={handleCloseDeleteSelectedItemDialog}
+                onConfirm={handleConfirmDeleteSelectedItem}
                 title="Hapus detail jurnal umum yang dipilih secara permanen?"
                 description='Anda yakin ingin menghapus data detail jurnal umum yang dipilih?
             Pastikan Anda telah mempertimbangkan dengan cermat sebelum melanjutkan.'
@@ -635,4 +635,4 @@ const InsertGeneralJournalForm = (props: InsertGeneralJournalFormProps) => {
     );
 };
 
-export default InsertGeneralJournalForm;
+export default InsertJournalEntryForm;

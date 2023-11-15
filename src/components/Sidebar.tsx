@@ -204,7 +204,7 @@ const GetSidebarLinkByMenuName = (name: string, displayName: string) => {
 
 		
 		case 'general-journal':
-			return <SidebarLinkButton Icon={Home} linkTo={"/general-journal-tree"}>
+			return <SidebarLinkButton Icon={Home} linkTo={"/journal-entry-tree"}>
 				{displayName}
 			</SidebarLinkButton>
 

@@ -10,53 +10,54 @@ import {
 import Header from "../../components/Header";
 import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
-import { GET_GENERAL_JOURNAL_HEADERS_URL, INSERT_GENERAL_JOURNAL_HEADER_URL } from '../../axios';
+import { GET_JOURNAL_ENTRIES, INSERT_JOURNAL_ENTRY_URL } from '../../axios';
 import useSnackBar from '../../hooks/useSnackBar';
-import IGeneralJournalHeader, { EmptyGeneralJournal } from '../../models/IGeneralJournal';
-import InsertGeneralJournalForm from './InsertGeneralJournalForm';
+import IJournalEntry, { EmptyJournalEntry } from '../../models/IJournalEntry';
+import InsertJournalEntryForm from './InsertJournalEntryForm';
 import { Add } from '@mui/icons-material';
+import { ConvertDateTimeToDate } from '../../utils/Converter';
 
-const columns: GridColDef<IGeneralJournalHeader>[] = [
+const columns: GridColDef<IJournalEntry>[] = [
     { field: "transactionNo", headerName: "Nomor Transaksi", width: 180, align: 'center', headerAlign: 'center' },
     { field: "transactionDate", headerName: "Tanggal Transaksi", width: 180, align: 'center', headerAlign: 'center', valueGetter: (params) => new Date(params.row.transactionDate).toLocaleDateString("id-ID") },
     { field: "description", headerName: "Deskripsi", width: 300 },
 ];
 
-const GeneralJournalTree = () => {
-    const [generalJournals, setGeneralJournals] = useState<Array<IGeneralJournalHeader>>([]);
+const JournalEntryTree = () => {
+    const [journalEntries, setJournalEntries] = useState<Array<IJournalEntry>>([]);
     const [openForm, setOpenForm] = useState<boolean>(false);
-    const [newGeneralJournal, setNewGeneralJournal] = useState<IGeneralJournalHeader>(EmptyGeneralJournal);
+    const [newJournalEntry, setNewJournalEntry] = useState<IJournalEntry>(EmptyJournalEntry);
     const [submitted, setSubmitted] = useState<boolean>(false);
     const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate();
     const { setSnackBar } = useSnackBar();
 
     useEffect(() => {
-        const fetchGeneralJournals = async () => {
+        const fetchJournalEntries = async () => {
             try {
-                const response = await axiosPrivate.get(GET_GENERAL_JOURNAL_HEADERS_URL());
+                const response = await axiosPrivate.get(GET_JOURNAL_ENTRIES());
                 const data = response.data;
 
                 if (data.error) {
                     setSnackBar({ children: data.error, severity: 'error' });
                 } else {
-                    setGeneralJournals(response.data);
+                    setJournalEntries(response.data);
                 }
             } catch (error) {
                 setSnackBar({ children: 'Terdapat kesalahan dalam mengambil data.', severity: 'error' });
             }
         };
 
-        fetchGeneralJournals();
+        fetchJournalEntries();
     }, [axiosPrivate, setSnackBar]);
 
-    const handleOnRowClicked = (params: GridRowParams<IGeneralJournalHeader>) => {
+    const handleOnRowClicked = (params: GridRowParams<IJournalEntry>) => {
         let path: string = `detail/${params.id}`;
         navigate(path);
     };
 
     const handleFieldChangesCreate = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setNewGeneralJournal((prevState) => ({
+        setNewJournalEntry((prevState) => ({
             ...prevState,
             [event.target.name]: event.target.value,
         }));
@@ -65,9 +66,9 @@ const GeneralJournalTree = () => {
     const handleDateFieldChangesCreate = (value: Date | null) => {
         let newValue = value || new Date();
 
-        setNewGeneralJournal((prevState) => ({
+        setNewJournalEntry((prevState) => ({
             ...prevState,
-            transactionDate: newValue,
+            transactionDate: ConvertDateTimeToDate(newValue),
         }));
     };
 
@@ -78,16 +79,16 @@ const GeneralJournalTree = () => {
             setSubmitted(true);
 
             try {
-                const response = await axiosPrivate.post(INSERT_GENERAL_JOURNAL_HEADER_URL(), newGeneralJournal);
+                const response = await axiosPrivate.post(INSERT_JOURNAL_ENTRY_URL(), newJournalEntry);
                 const data = response.data;
 
                 if (data.error) {
                     setSnackBar({ children: data.error, severity: 'error' });
                     setSubmitted(false);
                 } else {
-                    const createdGeneralJournalId = data.id;
+                    const createdJournalEntryId = data.id;
                     setSnackBar({ children: 'Data berhasil disimpan!', severity: 'success' });
-                    navigate(`detail/${createdGeneralJournalId}`);
+                    navigate(`detail/${createdJournalEntryId}`);
                 }
             } catch (error) {
                 setSnackBar({ children: 'Terjadi kesalahan dalam mengirimkan data.', severity: 'error' });
@@ -117,9 +118,9 @@ const GeneralJournalTree = () => {
             </Box>
 
             {openForm ? (
-                <InsertGeneralJournalForm
-                    generalJournal={newGeneralJournal}
-                    setGeneralJournal={setNewGeneralJournal}
+                <InsertJournalEntryForm
+                    journalEntry={newJournalEntry}
+                    setJournalEntry={setNewJournalEntry}
                     handleFieldChanges={handleFieldChangesCreate}
                     handleDateFieldChanges={handleDateFieldChangesCreate}
                     handleSubmit={handleSubmitCreate}
@@ -127,7 +128,7 @@ const GeneralJournalTree = () => {
                     autoFocus
                     onClickCancel={() => {
                         setOpenForm(false);
-                        setNewGeneralJournal(EmptyGeneralJournal);
+                        setNewJournalEntry(EmptyJournalEntry);
                     }}
                     buttonDisabled={submitted}
                 />
@@ -141,7 +142,7 @@ const GeneralJournalTree = () => {
 
                     <Box className="box-soft-shadow" p={3} borderRadius={3} marginBottom={3}>
                         <DataGrid
-                            rows={generalJournals}
+                            rows={journalEntries}
                             columns={columns}
                             getRowId={(row) => row?.id}
                             onRowClick={(params) => handleOnRowClicked(params)}
@@ -153,4 +154,4 @@ const GeneralJournalTree = () => {
     );
 };
 
-export default GeneralJournalTree;
+export default JournalEntryTree;
