@@ -11,7 +11,7 @@ interface ISidebarLinkButtonProps {
 const SidebarLinkButton = (props: ISidebarLinkButtonProps) => {
 	const location = useLocation();
 
-	const isActive = () => location.pathname === props.linkTo;
+	const isActive = () => location.pathname.includes(props.linkTo);
 
 	return (
 		<Link to={props.linkTo} style={{ textDecoration: "none" }}>
