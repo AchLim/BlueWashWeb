@@ -32,7 +32,7 @@ export const EmptyJournalEntry = () : IJournalEntry => {
 	}
 }
 
-export const EmptyJournalEntryDetail = (): IJournalItem => {
+export const EmptyJournalItem = (): IJournalItem => {
 	return {
 		'journalEntryId': null,
 		'journalItemId': '',

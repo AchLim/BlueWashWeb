@@ -27,11 +27,12 @@ import useSnackBar from '../../hooks/useSnackBar';
 import { useNavigate } from 'react-router-dom';
 import AlertDialogSlide from '../../components/AlertDialogSlide';
 import { DELETE_JOURNAL_ENTRY_URL, GET_CHART_OF_ACCOUNTS_URL } from '../../axios';
-import IJournalEntry, { EmptyJournalEntryDetail, IJournalItem } from '../../models/IJournalEntry';
+import IJournalEntry, { EmptyJournalItem, IJournalItem } from '../../models/IJournalEntry';
 import IChartOfAccount, { EmptyChartOfAccount } from '../../models/IChartOfAccount';
 import { v4 as uuidv4 } from 'uuid';
 import id from 'date-fns/locale/id';
 import { format } from 'date-fns';
+import { ConvertNumberToCurrency } from '../../utils/Converter';
 
 interface InsertJournalEntryFormProps {
     handleSubmit: (event: React.FormEvent<HTMLFormElement>) => Promise<void>;
@@ -54,11 +55,11 @@ const InsertJournalEntryForm = (props: InsertJournalEntryFormProps) => {
 
     // New-detail related
     const [open, setOpen] = useState<boolean>(false)
-    const [newItem, setNewItem] = useState<IJournalItem>(EmptyJournalEntryDetail);
+    const [newItem, setNewItem] = useState<IJournalItem>(EmptyJournalItem);
 
     // Edit-selected related
     const [openEdit, setOpenEdit] = useState<boolean>(false);
-    const [selectedItem, setSelectedItem] = useState<IJournalItem>(EmptyJournalEntryDetail);
+    const [selectedItem, setSelectedItem] = useState<IJournalItem>(EmptyJournalItem);
 
     // Delete Item
     const [openDeleteSelectedItemDialog, setOpenDeleteSelectedItemDialog] = useState<boolean>(false);
@@ -134,7 +135,7 @@ const InsertJournalEntryForm = (props: InsertJournalEntryFormProps) => {
             return prevHeader;
         });
 
-        setNewItem(EmptyJournalEntryDetail());
+        setNewItem(EmptyJournalItem());
         handleCloseDialog();
     };
 
@@ -161,7 +162,7 @@ const InsertJournalEntryForm = (props: InsertJournalEntryFormProps) => {
 
     const handleCloseEditDialog = () => {
         setOpenEdit(false);
-        setSelectedItem(EmptyJournalEntryDetail());
+        setSelectedItem(EmptyJournalItem());
     }
 
     const handleEditRow = (event: React.FormEvent<HTMLFormElement>) => {
@@ -183,7 +184,7 @@ const InsertJournalEntryForm = (props: InsertJournalEntryFormProps) => {
             };
         });
 
-        setSelectedItem(EmptyJournalEntryDetail());
+        setSelectedItem(EmptyJournalItem());
         handleCloseEditDialog();
     };
 
@@ -210,7 +211,7 @@ const InsertJournalEntryForm = (props: InsertJournalEntryFormProps) => {
 
     const handleCloseDeleteSelectedItemDialog = () => {
         setOpenDeleteSelectedItemDialog(false);
-        setSelectedItem(EmptyJournalEntryDetail());
+        setSelectedItem(EmptyJournalItem());
     }
 
     const handleEditJournalEntryDetail = (journalItemId: string) => {
@@ -241,7 +242,7 @@ const InsertJournalEntryForm = (props: InsertJournalEntryFormProps) => {
             journalItems: updatedHeaderData
         }));
 
-        setSelectedItem(EmptyJournalEntryDetail());
+        setSelectedItem(EmptyJournalItem());
         handleCloseDeleteSelectedItemDialog();
     }
 
@@ -277,7 +278,7 @@ const InsertJournalEntryForm = (props: InsertJournalEntryFormProps) => {
         {
             field: "accountNo", headerName: "Kode Akun", width: 240, valueGetter: (params) => {
                 let displayName = '';
-                if (params.row && params.row.chartOfAccount) {
+                if (params.row && params.row.chartOfAccount && params.row.chartOfAccount.accountNo) {
                     displayName = `${params.row.chartOfAccount.accountNo} - ${params.row.chartOfAccount.accountName}`
                 }
 
@@ -289,14 +290,11 @@ const InsertJournalEntryForm = (props: InsertJournalEntryFormProps) => {
             valueFormatter: (params: GridValueFormatterParams<number | string>) => {
                 let value = 0;
                 if (typeof params.value === 'string')
-                    value = parseInt(params.value);
+                    value = parseFloat(params.value);
                 else
                     value = params.value;
 
-                return value.toLocaleString("id-ID", { style: "currency", currency: "IDR" });
-            },
-            valueParser: (value: any) => {
-                return parseInt(value);
+                return ConvertNumberToCurrency(value);
             }
         },
         {
@@ -304,14 +302,12 @@ const InsertJournalEntryForm = (props: InsertJournalEntryFormProps) => {
             valueFormatter: (params: GridValueFormatterParams<number | string>) => {
                 let value = 0;
                 if (typeof params.value === 'string')
-                    value = parseInt(params.value);
+                    value = parseFloat(params.value);
                 else
                     value = params.value;
 
-                return value.toLocaleString("id-ID", { style: "currency", currency: "IDR" });
-            },
-            valueParser: (value: any) => {
-                return parseInt(value);
+
+                return ConvertNumberToCurrency(value);
             }
         },
         {
