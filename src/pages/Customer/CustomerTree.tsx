@@ -127,6 +127,16 @@ const CustomerTree = () => {
                                 rows={customers}
                                 columns={columns}
                                 getRowId={(row) => row?.id}
+                                onRowClick={(params) => HandleOnRowClicked(params)}
+                                autoHeight
+                                sx={{
+                                    '.MuiDataGrid-cell:focus': {
+                                        outline: 'none'
+                                    },
+                                    '.MuiDataGrid-cell:hover': {
+                                        cursor: 'pointer'
+                                    },
+                                }}
                                 slots={{
                                     noRowsOverlay: () => (
                                         <Stack height="100%" alignItems={'center'} justifyContent={'center'}>
@@ -137,15 +147,8 @@ const CustomerTree = () => {
                                         <Stack height="100%" alignItems={'center'} justifyContent={'center'}>
                                             Data tidak ditemukan.
                                         </Stack>
-                                    )
+                                    ),
                                 }}
-                                initialState={{
-                                    pagination: {
-                                        paginationModel: { page: 0, pageSize: 25 },
-                                    },
-                                }}
-                                onRowClick={(params) => HandleOnRowClicked(params)}
-                                pageSizeOptions={[5, 25]}
                             />
                         </Box>
                     </>
