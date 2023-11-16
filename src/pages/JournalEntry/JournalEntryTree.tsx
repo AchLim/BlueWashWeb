@@ -146,6 +146,14 @@ const JournalEntryTree = () => {
                             columns={columns}
                             getRowId={(row) => row?.id}
                             onRowClick={(params) => handleOnRowClicked(params)}
+                            sx={{
+                                '.MuiDataGrid-cell:focus': {
+                                    outline: 'none'
+                                },
+                                '.MuiDataGrid-cell:hover': {
+                                    cursor: 'pointer'
+                                }
+                            }}
                         />
                     </Box>
                 </>
