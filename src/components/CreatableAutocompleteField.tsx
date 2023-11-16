@@ -1,5 +1,4 @@
-import { Autocomplete, Dialog, DialogContent, DialogTitle, FilterOptionsState, TextField, createFilterOptions } from '@mui/material';
-import React, { useState } from 'react';
+import { Autocomplete, FilterOptionsState, TextField } from '@mui/material';
 
 interface ICreatableAutocompleteGeneric {
     inputValue?: string;
@@ -18,16 +17,6 @@ interface ICreatableAutocompleteFieldProps<T> {
     autoCompleteOnChangeUncreatedRecord: (event: React.SyntheticEvent<Element, Event>, value: T) => void;
     autoCompleteOnChangeExistingRecord: (event: React.SyntheticEvent<Element, Event>, value: T | null) => void
     autoCompleteFilterOptions: (options: T[], state: FilterOptionsState<T>) => T[];
-
-    dialogFullWidth?: boolean;
-    dialogMaxWidth?: "lg" | "md" | "sm" | "xl" | "xs";
-
-    dialogTitle: string;
-    dialogContent: React.JSX.Element;
-
-    openDialog: boolean;
-    setOpenDialog: (value: React.SetStateAction<boolean>) => void;
-
 }
 
 const CreatableAutocompleteField = <T extends ICreatableAutocompleteGeneric> (props: ICreatableAutocompleteFieldProps<T>) => {
@@ -45,18 +34,16 @@ const CreatableAutocompleteField = <T extends ICreatableAutocompleteGeneric> (pr
     const HandleAutocompleteOnChange = (event: React.SyntheticEvent<Element, Event>, value: string | T | null) => {
         if (typeof value === 'string') {
             setTimeout(() => {
-                props.setOpenDialog(true);
                 props.autoCompleteOnChangeString(event, value);
             });
         } else if (value && value.inputValue) {
-            props.setOpenDialog(true);
             props.autoCompleteOnChangeUncreatedRecord(event, value);
         } else {
             props.autoCompleteOnChangeExistingRecord(event, value);
         }
     }
 
-    return <React.Fragment>
+    return <>
         <Autocomplete
             id={props.autoCompleteId}
             value={props.autoCompleteValue}
@@ -80,14 +67,7 @@ const CreatableAutocompleteField = <T extends ICreatableAutocompleteGeneric> (pr
             autoHighlight
         />
 
-        <Dialog open={props.openDialog} fullWidth={props.dialogFullWidth} maxWidth={props.dialogMaxWidth}>
-            <DialogTitle>{props.dialogTitle}</DialogTitle>
-            <DialogContent>
-                {props.dialogContent}
-            </DialogContent>
-        </Dialog>
-
-    </React.Fragment>
+    </>
 
 }
 
