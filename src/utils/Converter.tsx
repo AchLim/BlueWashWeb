@@ -5,6 +5,10 @@ export const ConvertDateTimeToDate = (datetime: Date) => {
     return date;
 }
 
+export const ConvertDateToLocaleDate = (date: string) => {
+    return new Date(date).toLocaleDateString("id-ID");
+}
+
 export const ConvertNumberToCurrency = (number: number) => {
     return number.toLocaleString("id-ID", { style: "currency", currency: "IDR" });
 }
