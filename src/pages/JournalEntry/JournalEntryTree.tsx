@@ -9,7 +9,7 @@ import {
     Stack,
 } from "@mui/material";
 import Header from "../../components/Header";
-import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRowParams, GridToolbar } from "@mui/x-data-grid";
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { GET_JOURNAL_ENTRIES_URL, INSERT_JOURNAL_ENTRY_URL } from '../../axios';
 import useSnackBar from '../../hooks/useSnackBar';
@@ -172,6 +172,15 @@ const JournalEntryTree = () => {
                                         Data tidak ditemukan.
                                     </Stack>
                                 ),
+                                toolbar: GridToolbar
+                            }}
+                            slotProps={{
+                                toolbar: {
+                                    showQuickFilter: true,
+                                    quickFilterProps: {
+                                        debounceMs: 300
+                                    }
+                                }
                             }}
                         />
                     </Box>

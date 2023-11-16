@@ -5,10 +5,11 @@ import {
     Breadcrumbs,
     Button,
     SelectChangeEvent,
+    Stack,
     Typography,
 } from "@mui/material";
 import Header from "../../components/Header";
-import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRowParams, GridToolbar } from "@mui/x-data-grid";
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { GET_CHART_OF_ACCOUNTS_URL, INSERT_CHART_OF_ACCOUNT_URL } from '../../axios';
 import useSnackBar from '../../hooks/useSnackBar';
@@ -58,18 +59,18 @@ const ChartOfAccountTree = () => {
             [event.target.name]: event.target.value,
         }));
     }
-    
+
     const handleSelectAccountHeader = (event: SelectChangeEvent) => {
-		let accountHeaderNo: number | string = parseInt(event.target.value);
+        let accountHeaderNo: number | string = parseInt(event.target.value);
         if (isNaN(accountHeaderNo)) {
             accountHeaderNo = '';
         }
 
-		let accountHeaderName: string = GetAccountHeaderNameByNo(accountHeaderNo);
+        let accountHeaderName: string = GetAccountHeaderNameByNo(accountHeaderNo);
         setNewChartOfAccounts((prevState: IChartOfAccount) => ({
             ...prevState,
             [event.target.name]: event.target.value,
-			accountHeaderName: accountHeaderName,
+            accountHeaderName: accountHeaderName,
         }));
     }
 
@@ -95,18 +96,18 @@ const ChartOfAccountTree = () => {
 
     return (
         <>
-            <Header title="Chart of Account" />
+            <Header title="Kode Akun" />
             <Box paddingBlock={1} marginBottom={3}>
                 <Breadcrumbs aria-label="breadcrumb">
                     <Typography color="text.disabled">Master Data</Typography>
-                    {!openForm && <Typography color="text.primary">Chart of Account</Typography>}
+                    {!openForm && <Typography color="text.primary">Kode Akun</Typography>}
                     {openForm &&
                         <Typography
                             onClick={() => setOpenForm(false)}
                             color="primary"
                             sx={{ textDecoration: 'none', cursor: 'pointer' }}
                         >
-                            Chart of Account
+                            Kode Akun
                         </Typography>
                     }
                     {openForm && <Typography color="text.primary">Form</Typography>}
@@ -126,7 +127,7 @@ const ChartOfAccountTree = () => {
                             setOpenForm(false);
                             setNewChartOfAccounts(EmptyChartOfAccount);
                         }}
-                        
+
                         buttonDisabled={submitted}
                     />
                 ) : (
@@ -142,13 +143,36 @@ const ChartOfAccountTree = () => {
                                 rows={chartOfAccounts}
                                 columns={columns}
                                 getRowId={(row) => row?.id}
-                                initialState={{
-                                    pagination: {
-                                        paginationModel: { page: 0, pageSize: 25 },
+                                onRowClick={(params) => handleOnRowClicked(params)}
+                                sx={{
+                                    '.MuiDataGrid-cell:focus': {
+                                        outline: 'none'
+                                    },
+                                    '.MuiDataGrid-cell:hover': {
+                                        cursor: 'pointer'
                                     },
                                 }}
-                                onRowClick={(params) => handleOnRowClicked(params)}
-                                pageSizeOptions={[5, 25]}
+                                slots={{
+                                    noRowsOverlay: () => (
+                                        <Stack height="100%" alignItems={'center'} justifyContent={'center'}>
+                                            Data kosong.
+                                        </Stack>
+                                    ),
+                                    noResultsOverlay: () => (
+                                        <Stack height="100%" alignItems={'center'} justifyContent={'center'}>
+                                            Data tidak ditemukan.
+                                        </Stack>
+                                    ),
+                                    toolbar: GridToolbar
+                                }}
+                                slotProps={{
+                                    toolbar: {
+                                        showQuickFilter: true,
+                                        quickFilterProps: {
+                                            debounceMs: 300
+                                        }
+                                    }
+                                }}
                             />
                         </Box>
                     </>

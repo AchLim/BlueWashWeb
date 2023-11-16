@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import {
     Box,
     Breadcrumbs,
+    Stack,
     Typography,
-  } from "@mui/material";
+} from "@mui/material";
 import Header from "../../components/Header";
-import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRowParams, GridToolbar } from "@mui/x-data-grid";
 import { GET_SUPPLIERS_URL } from '../../axios';
 import ISupplier from '../../models/ISupplier';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
@@ -21,7 +22,7 @@ const columns: GridColDef<ISupplier>[] = [
 const SupplierTree = () => {
     const navigate = useNavigate();
     const [suppliers, setSuppliers] = useState<Array<ISupplier>>([]);
-    
+
     const axiosPrivate = useAxiosPrivate();
     const { setSnackBar } = useSnackBar();
 
@@ -46,31 +47,53 @@ const SupplierTree = () => {
 
     return (
         <>
-        <Header title="Pemasok" />
-        <Box paddingBlock={1} marginBottom={3}>
-            <Breadcrumbs aria-label="breadcrumb">
-            <Typography color="text.disabled">Master Data</Typography>
-            <Typography color="text.primary">Pemasok</Typography>
-            </Breadcrumbs>
-        </Box>
-        
-        <Box className="box-soft-shadow" p={3} borderRadius={3} marginBottom={3}>
-            <DataGrid
-            rows={suppliers}
-            columns={columns}
-            getRowId={(row) => row?.id}
-            initialState={{
-                pagination: {
-                    paginationModel: { page: 0, pageSize: 25 },
-                },
-            }}
-            onRowClick={(params) => HandleOnRowClicked(params)}
-            pageSizeOptions={[5, 25]}
-            />
-        </Box>
+            <Header title="Pemasok" />
+            <Box paddingBlock={1} marginBottom={3}>
+                <Breadcrumbs aria-label="breadcrumb">
+                    <Typography color="text.disabled">Master Data</Typography>
+                    <Typography color="text.primary">Pemasok</Typography>
+                </Breadcrumbs>
+            </Box>
+
+            <Box className="box-soft-shadow" p={3} borderRadius={3} marginBottom={3}>
+                <DataGrid
+                    rows={suppliers}
+                    columns={columns}
+                    getRowId={(row) => row?.id}
+                    onRowClick={(params) => HandleOnRowClicked(params)}
+                    sx={{
+                        '.MuiDataGrid-cell:focus': {
+                            outline: 'none'
+                        },
+                        '.MuiDataGrid-cell:hover': {
+                            cursor: 'pointer'
+                        },
+                    }}
+                    slots={{
+                        noRowsOverlay: () => (
+                            <Stack height="100%" alignItems={'center'} justifyContent={'center'}>
+                                Data kosong.
+                            </Stack>
+                        ),
+                        noResultsOverlay: () => (
+                            <Stack height="100%" alignItems={'center'} justifyContent={'center'}>
+                                Data tidak ditemukan.
+                            </Stack>
+                        ),
+                        toolbar: GridToolbar
+                    }}
+                    slotProps={{
+                        toolbar: {
+                            showQuickFilter: true,
+                            quickFilterProps: {
+                                debounceMs: 300
+                            }
+                        }
+                    }}
+                />
+            </Box>
         </>
     );
 };
 
 export default SupplierTree;
-  

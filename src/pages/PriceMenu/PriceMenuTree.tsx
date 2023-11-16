@@ -8,9 +8,9 @@ import {
     TextField,
     Typography,
     IconButton,
-  } from "@mui/material";
+} from "@mui/material";
 import Header from "../../components/Header";
-import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRowParams, GridToolbar } from "@mui/x-data-grid";
 import IPriceMenu from "../../models/IPriceMenu";
 import { GET_PRICEMENUS_URL } from '../../axios';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
@@ -52,31 +52,53 @@ const PriceMenuTree = () => {
 
     return (
         <>
-        <Header title="Price Menu" />
-        <Box paddingBlock={1} marginBottom={3}>
-            <Breadcrumbs aria-label="breadcrumb">
-            <Typography color="text.disabled">Master Data</Typography>
-            <Typography color="text.primary">Price Menu</Typography>
-            </Breadcrumbs>
-        </Box>
-        
-        <Box className="box-soft-shadow" p={3} borderRadius={3} marginBottom={3}>
-            <DataGrid
-            rows={priceMenus}
-            columns={columns}
-            getRowId={(row) => row?.priceMenuId}
-            initialState={{
-                pagination: {
-                    paginationModel: { page: 0, pageSize: 25 },
-                },
-            }}
-            onRowClick={(params) => HandleOnRowClicked(params)}
-            pageSizeOptions={[5, 25]}
-            />
-        </Box>
+            <Header title="Menu Harga" />
+            <Box paddingBlock={1} marginBottom={3}>
+                <Breadcrumbs aria-label="breadcrumb">
+                    <Typography color="text.disabled">Master Data</Typography>
+                    <Typography color="text.primary">Menu Harga</Typography>
+                </Breadcrumbs>
+            </Box>
+
+            <Box className="box-soft-shadow" p={3} borderRadius={3} marginBottom={3}>
+                <DataGrid
+                    rows={priceMenus}
+                    columns={columns}
+                    getRowId={(row) => row?.priceMenuId}
+                    onRowClick={(params) => HandleOnRowClicked(params)}
+                    sx={{
+                        '.MuiDataGrid-cell:focus': {
+                            outline: 'none'
+                        },
+                        '.MuiDataGrid-cell:hover': {
+                            cursor: 'pointer'
+                        },
+                    }}
+                    slots={{
+                        noRowsOverlay: () => (
+                            <Stack height="100%" alignItems={'center'} justifyContent={'center'}>
+                                Data kosong.
+                            </Stack>
+                        ),
+                        noResultsOverlay: () => (
+                            <Stack height="100%" alignItems={'center'} justifyContent={'center'}>
+                                Data tidak ditemukan.
+                            </Stack>
+                        ),
+                        toolbar: GridToolbar
+                    }}
+                    slotProps={{
+                        toolbar: {
+                            showQuickFilter: true,
+                            quickFilterProps: {
+                                debounceMs: 300
+                            }
+                        }
+                    }}
+                />
+            </Box>
         </>
     );
 };
 
 export default PriceMenuTree;
-  

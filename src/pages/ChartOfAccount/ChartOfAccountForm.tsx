@@ -96,11 +96,11 @@ const ChartOfAccountForm = () => {
 
 	return (
 		<>
-			<Header title="Chart of Account" />
+			<Header title="Kode Akun" />
 			<Box paddingBlock={1} marginBottom={3}>
 				<Breadcrumbs aria-label="breadcrumb">
 					<Typography color="text.disabled">Master Data</Typography>
-					<Typography component={Link} to={'../'} color="primary" sx={{ textDecoration: 'none' }}>Chart of Account</Typography>
+					<Typography component={Link} to={'../'} color="primary" sx={{ textDecoration: 'none' }}>Kode Akun</Typography>
 					<Typography>{chartOfAccount.accountNo} - {chartOfAccount.accountName}</Typography>
 				</Breadcrumbs>
 			</Box>

@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import Header from "../../components/Header";
 import { Add, ArrowBack, ArrowForward } from "@mui/icons-material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import { Link, useParams } from "react-router-dom";
 import ILaundryService from '../../models/ILaundryService';
 import { GET_LAUNDRYSERVICE_BY_ID_URL, UPDATE_LAUNDRYSERVICE_URL } from '../../axios';
@@ -48,19 +48,19 @@ const ServiceForm = () => {
 	if (typeof LaundryServiceId === 'undefined') {
 		return <div>Invalid request, please reload.</div>
 	}
-	
-    const axiosPrivate = useAxiosPrivate();
-    const { setSnackBar } = useSnackBar();
+
+	const axiosPrivate = useAxiosPrivate();
+	const { setSnackBar } = useSnackBar();
 
 	useEffect(() => {
 		const fetchLaundryService = async () => {
 			var response = await axiosPrivate.get(GET_LAUNDRYSERVICE_BY_ID_URL(LaundryServiceId!));
-            const data = response.data;
-            if (data.error) {
-                setSnackBar({ children: data.error, severity: 'error' })
-            } else {
-                setLaundryService(data);
-            }
+			const data = response.data;
+			if (data.error) {
+				setSnackBar({ children: data.error, severity: 'error' })
+			} else {
+				setLaundryService(data);
+			}
 		};
 
 		fetchLaundryService().catch(console.error);
@@ -178,13 +178,36 @@ const ServiceForm = () => {
 							rows={laundryService.priceMenus}
 							columns={columns}
 							getRowId={(row) => row?.priceMenuId}
-							initialState={{
-								pagination: {
-									paginationModel: { page: 0, pageSize: 25 },
+							autoHeight
+							sx={{
+								'.MuiDataGrid-cell:focus': {
+									outline: 'none'
+								},
+								'.MuiDataGrid-cell:hover': {
+									cursor: 'pointer'
 								},
 							}}
-							autoHeight
-							pageSizeOptions={[5, 25]}
+							slots={{
+								noRowsOverlay: () => (
+									<Stack height="100%" alignItems={'center'} justifyContent={'center'}>
+										Data kosong.
+									</Stack>
+								),
+								noResultsOverlay: () => (
+									<Stack height="100%" alignItems={'center'} justifyContent={'center'}>
+										Data tidak ditemukan.
+									</Stack>
+								),
+								toolbar: GridToolbar
+							}}
+							slotProps={{
+								toolbar: {
+									showQuickFilter: true,
+									quickFilterProps: {
+										debounceMs: 300
+									}
+								}
+							}}
 						/>
 					</Box>)
 			}

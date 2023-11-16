@@ -20,7 +20,7 @@ import {
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { DataGrid, GridColDef, GridRenderCellParams, GridValueFormatterParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRenderCellParams, GridToolbar, GridValueFormatterParams } from '@mui/x-data-grid';
 import { Add, Delete, Edit } from '@mui/icons-material';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useSnackBar from '../../hooks/useSnackBar';
@@ -457,6 +457,15 @@ const InsertJournalEntryForm = (props: InsertJournalEntryFormProps) => {
                                     Data tidak ditemukan.
                                 </Stack>
                             ),
+                            toolbar: GridToolbar
+                        }}
+                        slotProps={{
+                            toolbar: {
+                                showQuickFilter: true,
+                                quickFilterProps: {
+                                    debounceMs: 300
+                                }
+                            }
                         }}
                     />
                 </Box>
