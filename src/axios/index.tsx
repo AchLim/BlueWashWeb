@@ -45,6 +45,13 @@ export const UPDATE_CURRENCY_URL = (id: string) => `/currency/update/${id}`;
 export const DELETE_CURRENCY_URL = (id: string) => `/currency/delete/${id}`;
 
 
+export const GET_INVENTORIES_URL = () => '/inventory/all';
+export const GET_INVENTORY_BY_ID_URL = (id: string) => `/inventory/${id}`;
+export const INSERT_INVENTORY_URL = () => '/inventory/insert';
+export const UPDATE_INVENTORY_URL = (id: string) => `/inventory/update/${id}`;
+export const DELETE_INVENTORY_URL = (id: string) => `/inventory/delete/${id}`;
+
+
 export const GET_CUSTOMERS_URL = () => '/customer/all';
 export const GET_CUSTOMER_BY_ID_URL = (id: string) => `/customer/${id}`;
 export const INSERT_CUSTOMER_URL = () => '/customer/insert';
@@ -59,11 +66,17 @@ export const UPDATE_CHART_OF_ACCOUNT_URL = (id: string) => `/chart-of-account/up
 export const DELETE_CHART_OF_ACCOUNT_URL = (id: string) => `/chart-of-account/delete/${id}`;
 
 
-export const GET_JOURNAL_ENTRIES = () => '/journal-entry/all';
-export const GET_JOURNAL_ENTRY_BY_ID = (id: string) => `/journal-entry/${id}`;
+export const GET_JOURNAL_ENTRIES_URL = () => '/journal-entry/all';
+export const GET_JOURNAL_ENTRY_BY_ID_URL = (id: string) => `/journal-entry/${id}`;
 export const INSERT_JOURNAL_ENTRY_URL = () => '/journal-entry/insert';
 export const UPDATE_JOURNAL_ENTRY_URL = (id: string) => `/journal-entry/update/${id}`;
 export const DELETE_JOURNAL_ENTRY_URL = (id: string) => `/journal-entry/delete/${id}`;
+
+export const GET_PURCHASE_HEADERS_URL = () => '/purchase/header/all';
+export const GET_PURCHASE_HEADER_BY_ID_URL = (id: string) => `/purchase/header/${id}`;
+export const INSERT_PURCHASE_HEADER_URL = () => '/purchase/header/insert';
+export const UPDATE_PURCHASE_HEADER_URL = (id: string) => `/purchase/header/update/${id}`;
+export const DELETE_PURCHASE_HEADER_URL = (id: string) => `/purchase/header/delete/${id}`;
 
 
 export const GET_SUPPLIERS_URL = () => '/supplier/all';
