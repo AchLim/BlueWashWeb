@@ -179,7 +179,7 @@ const GetSidebarLinkByMenuName = (name: string, displayName: string) => {
 		case 'inventory':
 			return <SidebarLinkButton
 				Icon={Inventory}
-				linkTo={"/master-data/inventory-form"}
+				linkTo={"/master-data/inventory-tree"}
 			>
 				{displayName}
 			</SidebarLinkButton>
@@ -210,7 +210,7 @@ const GetSidebarLinkByMenuName = (name: string, displayName: string) => {
 
 		
 		case 'purchase':
-			return <SidebarLinkButton Icon={Home} linkTo={"/purchase"}>
+			return <SidebarLinkButton Icon={Home} linkTo={"/purchase-tree"}>
 				{displayName}
 			</SidebarLinkButton>
 
