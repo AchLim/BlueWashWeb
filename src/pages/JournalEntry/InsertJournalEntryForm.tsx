@@ -439,7 +439,13 @@ const InsertJournalEntryForm = (props: InsertJournalEntryFormProps) => {
                         columns={columns}
                         getRowId={(row) => row?.journalItemId}
                         editMode='row'
+                        rowSelection={false}
                         autoHeight
+                        sx={{
+                            '.MuiDataGrid-cell:focus': {
+                                outline: 'none'
+                            },
+                        }}
                         slots={{
                             noRowsOverlay: () => (
                                 <Stack height="100%" alignItems={'center'} justifyContent={'center'}>
@@ -452,7 +458,6 @@ const InsertJournalEntryForm = (props: InsertJournalEntryFormProps) => {
                                 </Stack>
                             ),
                         }}
-                        rowSelection={false}
                     />
                 </Box>
 
