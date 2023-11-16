@@ -10,9 +10,7 @@ import Dashboard from "./pages/Dashboard.tsx";
 import Layout from './pages/Layout.tsx';
 import CustomerForm from "./pages/Customer/CustomerForm.tsx";
 import SalesForm from "./pages/SalesForm.tsx";
-import InventoryForm from "./pages/InventoryForm.tsx";
 import SalesPaymentForm from "./pages/SalesPaymentForm.tsx";
-import PurchaseForm from "./pages/PurchaseForm.tsx";
 import PriceMenuTree from "./pages/PriceMenu/PriceMenuTree.tsx";
 import ServiceTree from "./pages/Service/ServiceTree.tsx";
 import ServiceForm from './pages/Service/ServiceForm.tsx';
@@ -29,6 +27,10 @@ import ChartOfAccountTree from "./pages/ChartOfAccount/ChartOfAccountTree.tsx";
 import ChartOfAccountForm from "./pages/ChartOfAccount/ChartOfAccountForm.tsx";
 import JournalEntryTree from "./pages/JournalEntry/JournalEntryTree.tsx";
 import JournalEntryForm from "./pages/JournalEntry/JournalEntryForm.tsx";
+import PurchaseForm from "./pages/Purchase/PurchaseForm.tsx";
+import PurchaseTree from "./pages/Purchase/PurchaseTree.tsx";
+import InventoryTree from "./pages/Inventory/InventoryTree.tsx";
+import InventoryForm from "./pages/Inventory/InventoryForm.tsx";
 
 const App = () => {
 
@@ -61,7 +63,11 @@ const App = () => {
 									<Route path="detail/:id" element={<SupplierForm />} />
 								</Route>
 
-								<Route path="inventory-form" element={<InventoryForm />} />
+								<Route path="inventory-tree" element={<RequiredAuth menuName='inventory' />}>
+									<Route path='' element={<InventoryTree />} />
+									<Route path="detail/:id" element={<InventoryForm />} />
+								</Route>
+
 								<Route path="price-menu-tree" element={<PriceMenuTree />} />
 								<Route path="service-tree">
 									<Route path='' element={<ServiceTree />} />
@@ -72,8 +78,9 @@ const App = () => {
 								<Route path='' element={<JournalEntryTree />} />
 								<Route path='detail/:id' element={<JournalEntryForm />} />
 							</Route>
-							<Route path="purchase">
-								<Route index element={<PurchaseForm />} />
+							<Route path="purchase-tree" element={<RequiredAuth menuName='purchase' />}>
+								<Route path='' element={<PurchaseTree />} />
+								<Route path='detail/:id' element={<PurchaseForm />} />
 							</Route>
 							<Route path="sales">
 								<Route index element={<SalesForm />} />
