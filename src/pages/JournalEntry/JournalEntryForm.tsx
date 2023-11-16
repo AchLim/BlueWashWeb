@@ -9,14 +9,15 @@ import IJournalEntry, { EmptyJournalEntry } from '../../models/IJournalEntry';
 import InsertJournalEntryForm from './InsertJournalEntryForm';
 import { ConvertDateTimeToDate } from '../../utils/Converter';
 
-const JournalEntryForm: React.FC = () => {
+const JournalEntryForm = () => {
 	const { id } = useParams();
+	const { setSnackBar } = useSnackBar();
+	const location = useLocation();
+	const axiosPrivate = useAxiosPrivate();
+	const navigate = useNavigate();
+
 	const [journalEntry, setJournalEntry] = useState<IJournalEntry>(EmptyJournalEntry);
 	const [isEditMode, setIsEditMode] = useState<boolean>(false);
-	const axiosPrivate = useAxiosPrivate();
-	const { setSnackBar } = useSnackBar();
-	const navigate = useNavigate();
-	const location = useLocation();
 
 	useEffect(() => {
 		const fetchGeneralJournal = async () => {
@@ -31,7 +32,7 @@ const JournalEntryForm: React.FC = () => {
 		};
 
 		fetchGeneralJournal();
-	}, [id, isEditMode, axiosPrivate, navigate, location, setSnackBar]);
+	}, []);
 
 	const onClickEdit = () => {
 		setJournalEntry(journalEntry);

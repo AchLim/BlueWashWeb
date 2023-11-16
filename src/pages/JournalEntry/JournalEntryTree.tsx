@@ -24,13 +24,15 @@ const columns: GridColDef<IJournalEntry>[] = [
 ];
 
 const JournalEntryTree = () => {
-    const [journalEntries, setJournalEntries] = useState<Array<IJournalEntry>>([]);
-    const [openForm, setOpenForm] = useState<boolean>(false);
-    const [newJournalEntry, setNewJournalEntry] = useState<IJournalEntry>(EmptyJournalEntry);
-    const [submitted, setSubmitted] = useState<boolean>(false);
     const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate();
     const { setSnackBar } = useSnackBar();
+
+    const [journalEntries, setJournalEntries] = useState<Array<IJournalEntry>>([]);
+    const [openForm, setOpenForm] = useState<boolean>(false);
+
+    const [newJournalEntry, setNewJournalEntry] = useState<IJournalEntry>(EmptyJournalEntry);
+    const [submitted, setSubmitted] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchJournalEntries = async () => {
@@ -49,7 +51,7 @@ const JournalEntryTree = () => {
         };
 
         fetchJournalEntries();
-    }, [axiosPrivate, setSnackBar]);
+    }, []);
 
     const handleOnRowClicked = (params: GridRowParams<IJournalEntry>) => {
         let path: string = `detail/${params.id}`;
@@ -135,7 +137,10 @@ const JournalEntryTree = () => {
             ) : (
                 <>
                     <Grid container justifyContent="flex-start">
-                        <Button startIcon={<Add />} variant="contained" color="primary" sx={{ marginBottom: "1rem" }} onClick={() => setOpenForm(true)}>
+                        <Button startIcon={<Add />} variant="contained" color="primary" sx={{ marginBottom: "1rem" }} onClick={() => {
+                            setOpenForm(true)
+                            setNewJournalEntry(EmptyJournalEntry);
+                        }}>
                             Tambah Data
                         </Button>
                     </Grid>

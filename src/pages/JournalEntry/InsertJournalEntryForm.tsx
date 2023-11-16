@@ -79,7 +79,7 @@ const InsertJournalEntryForm = (props: InsertJournalEntryFormProps) => {
             }
         };
         getChartOfAccounts();
-    }, [axiosPrivate]);
+    }, []);
 
     const handleOnClick = () => {
         if (!props.journalEntry.id.trim()) {
