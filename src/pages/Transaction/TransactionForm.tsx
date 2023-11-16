@@ -22,7 +22,6 @@ import { useEffect, useState } from "react";
 import { GET_CUSTOMERS_URL, INSERT_CUSTOMER_URL } from "../../axios";
 import ICustomer, { EmptyCustomer } from "../../models/ICustomer";
 import InsertCustomerForm from "../Customer/InsertCustomerForm";
-import CustomerCreatableAutocompleteField from "../../components/CustomerCreatableAutocompleteField";
 import { useLocation, useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import useSnackBar from "../../hooks/useSnackBar";
@@ -105,20 +104,6 @@ const TransactionForm = () => {
 				<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="id">
 					<DatePicker label="Tanggal Transaksi" defaultValue={dayjs()} />
 				</LocalizationProvider>
-
-				<CustomerCreatableAutocompleteField
-					fieldId="customerName"
-					fieldLabel="Nama Pelanggan"
-					optionList={customers}
-					customerValue={selectedCustomer}
-					setCustomerValue={setSelectedCustomer}
-					onSuccess={(createdCustomer) => {
-						setSnackBar({children: `Data pelanggan dengan nama ${createdCustomer.customerName} berhasil dibuat.`, severity: "success"})
-					}}
-					onError={(errorMessage) => {
-						setSnackBar({children: `${errorMessage}`, severity: "error"})
-					}}
-				/>
 
 				<TextField name="customerCode" label="Kode Pelanggan" size="small" disabled value={selectedCustomer.customerCode	} />
 				<Box display={"flex"}>
