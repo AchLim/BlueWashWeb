@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import {
     Box,
     Button,
@@ -20,7 +20,7 @@ import {
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { DataGrid, GridColDef, GridRenderCellParams, GridValueFormatterParams, GridValueGetterParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRenderCellParams, GridToolbar, GridValueFormatterParams, GridValueGetterParams } from '@mui/x-data-grid';
 import { Add, Delete, Edit } from '@mui/icons-material';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useSnackBar from '../../hooks/useSnackBar';
@@ -55,6 +55,8 @@ const InsertPurchaseHeaderForm = (props: InsertPurchaseHeaderFormProps) => {
     const axiosPrivate = useAxiosPrivate();
     const { setSnackBar } = useSnackBar();
     const navigate = useNavigate();
+
+    const inventoryFormRef = useRef<HTMLFormElement>(null);
 
     // New-detail related
     const [open, setOpen] = useState<boolean>(false)
@@ -143,9 +145,7 @@ const InsertPurchaseHeaderForm = (props: InsertPurchaseHeaderFormProps) => {
         setOpen(false);
     };
 
-    const handleAddRow = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-
+    const addRow = () => {
         const newItemWithId = {
             ...newItem,
             purchaseDetailId: uuidv4(),
@@ -163,10 +163,31 @@ const InsertPurchaseHeaderForm = (props: InsertPurchaseHeaderFormProps) => {
 
             return prevHeader;
         });
+    }
+
+    const handleAddRow = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        addRow();
 
         setNewItem(EmptyPurchaseDetail());
+
         handleCloseDialog();
     };
+
+    const handleAddRowNoClose = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+
+        if (!inventoryFormRef.current?.checkValidity()) {
+            setSnackBar({ children: 'Form tidak valid, harap isi semua bidang dengan benar.', severity: 'error' });
+            return;
+        }
+
+        setSnackBar({ children: 'Data berhasil ditambahkan.', severity: 'success' });
+        addRow();
+
+        setNewItem(EmptyPurchaseDetail());
+    }
 
     const handleNewItemOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setNewItem((prevState) => ({
@@ -447,7 +468,7 @@ const InsertPurchaseHeaderForm = (props: InsertPurchaseHeaderFormProps) => {
                                 </Grid>
 
                                 <Grid item xs={12} md={3}>
-                                    <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Deskripsi</Typography>
+                                    <Typography variant="subtitle1">Deskripsi</Typography>
                                 </Grid>
                                 <Grid item xs={12} md={9}>
                                     <Typography variant="body1">{props.purchaseHeader.description}</Typography>
@@ -501,11 +522,14 @@ const InsertPurchaseHeaderForm = (props: InsertPurchaseHeaderFormProps) => {
                         columns={columns}
                         getRowId={(row) => row?.purchaseDetailId}
                         editMode='row'
-                        rowSelection={false}
                         autoHeight
+                        rowSelection={false}
                         sx={{
                             '.MuiDataGrid-cell:focus': {
                                 outline: 'none'
+                            },
+                            '.MuiDataGrid-cell:hover': {
+                                cursor: 'pointer'
                             },
                         }}
                         slots={{
@@ -519,17 +543,37 @@ const InsertPurchaseHeaderForm = (props: InsertPurchaseHeaderFormProps) => {
                                     Data tidak ditemukan.
                                 </Stack>
                             ),
+                            toolbar: GridToolbar
+                        }}
+                        slotProps={{
+                            toolbar: {
+                                showQuickFilter: true,
+                                quickFilterProps: {
+                                    debounceMs: 300
+                                }
+                            }
                         }}
                     />
                 </Box>
 
                 {/* Create Detail Dialog */}
-                <Dialog open={open} onClose={handleCloseDialog} fullWidth maxWidth="md">
+                <Dialog
+                    open={open}
+                    onClose={handleCloseDialog}
+                    fullWidth
+                    maxWidth="md"
+                // sx={{
+                //     '.MuiDialog-scrollPaper': {
+                //         alignItems: 'flex-start'
+                //     }
+                // }}
+                >
                     <DialogTitle>Tambah Detail</DialogTitle>
                     <DialogContent>
                         <Stack
-                            id={'detail-form'}
+                            id={'add-detail-form'}
                             component="form"
+                            ref={inventoryFormRef}
                             onSubmit={handleAddRow}
                             className="box-soft-shadow"
                             p={3}
@@ -555,6 +599,21 @@ const InsertPurchaseHeaderForm = (props: InsertPurchaseHeaderFormProps) => {
                                 </Select>
                             </FormControl>
 
+                            <FormControl fullWidth sx={{ m: 1 }}>
+                                <InputLabel required htmlFor="price-adornment-amount">Harga Satuan</InputLabel>
+                                <OutlinedInput
+                                    name='price'
+                                    id="price-adornment-amount"
+                                    startAdornment={<InputAdornment position="start">Rp</InputAdornment>}
+                                    label="Harga Satuan"
+                                    required
+                                    type={'number'}
+                                    value={newItem.price}
+                                    onChange={handleNewItemOnChange}
+                                    disabled={!props.isEditMode}
+                                />
+                            </FormControl>
+
                             <TextField
                                 name='quantity'
                                 label="Kuantitas"
@@ -564,21 +623,6 @@ const InsertPurchaseHeaderForm = (props: InsertPurchaseHeaderFormProps) => {
                                 onChange={handleNewItemOnChange}
                                 disabled={!props.isEditMode}
                             />
-
-                            <FormControl fullWidth sx={{ m: 1 }}>
-                                <InputLabel required htmlFor="price-adornment-amount">Harga</InputLabel>
-                                <OutlinedInput
-                                    name='price'
-                                    id="price-adornment-amount"
-                                    startAdornment={<InputAdornment position="start">Rp</InputAdornment>}
-                                    label="Harga"
-                                    required
-                                    type={'number'}
-                                    value={newItem.price}
-                                    onChange={handleNewItemOnChange}
-                                    disabled={!props.isEditMode}
-                                />
-                            </FormControl>
 
                             <FormControl fullWidth sx={{ m: 1 }}>
                                 <InputLabel htmlFor="subtotal-adornment-amount">Subtotal</InputLabel>
@@ -597,7 +641,10 @@ const InsertPurchaseHeaderForm = (props: InsertPurchaseHeaderFormProps) => {
                     </DialogContent>
 
                     <DialogActions>
-                        <Button type='submit' variant='contained' form={'detail-form'} color='primary'>
+                        <Button type='button' variant='contained' onClick={handleAddRowNoClose} color='primary'>
+                            Tambah & Lanjut
+                        </Button>
+                        <Button type='submit' variant='contained' form={'add-detail-form'} color='primary'>
                             Tambah
                         </Button>
                         <Button variant='outlined' onClick={handleCloseDialog}>
@@ -611,7 +658,7 @@ const InsertPurchaseHeaderForm = (props: InsertPurchaseHeaderFormProps) => {
                     <DialogTitle>Edit Detail</DialogTitle>
                     <DialogContent>
                         <Stack
-                            id={'detail-form'}
+                            id={'edit-detail-form'}
                             component="form"
                             onSubmit={handleEditRow}
                             className="box-soft-shadow"
@@ -638,6 +685,21 @@ const InsertPurchaseHeaderForm = (props: InsertPurchaseHeaderFormProps) => {
                                 </Select>
                             </FormControl>
 
+                            <FormControl fullWidth sx={{ m: 1 }}>
+                                <InputLabel required htmlFor="edit-price-adornment-amount">Harga Satuan</InputLabel>
+                                <OutlinedInput
+                                    name='price'
+                                    id="edit-price-adornment-amount"
+                                    startAdornment={<InputAdornment position="start">Rp</InputAdornment>}
+                                    label="Harga Satuan"
+                                    required
+                                    type={'number'}
+                                    value={selectedItem.price}
+                                    onChange={handleSelectedItemOnChange}
+                                    disabled={!props.isEditMode}
+                                />
+                            </FormControl>
+
                             <TextField
                                 name='quantity'
                                 label="Quantity"
@@ -647,21 +709,6 @@ const InsertPurchaseHeaderForm = (props: InsertPurchaseHeaderFormProps) => {
                                 onChange={handleSelectedItemOnChange}
                                 disabled={!props.isEditMode}
                             />
-
-                            <FormControl fullWidth sx={{ m: 1 }}>
-                                <InputLabel required htmlFor="edit-price-adornment-amount">Price</InputLabel>
-                                <OutlinedInput
-                                    name='price'
-                                    id="edit-price-adornment-amount"
-                                    startAdornment={<InputAdornment position="start">Rp</InputAdornment>}
-                                    label="Price"
-                                    required
-                                    type={'number'}
-                                    value={selectedItem.price}
-                                    onChange={handleSelectedItemOnChange}
-                                    disabled={!props.isEditMode}
-                                />
-                            </FormControl>
 
                             <FormControl fullWidth sx={{ m: 1 }}>
                                 <InputLabel htmlFor="subtotal-edit-adornment-amount">Subtotal</InputLabel>
@@ -680,7 +727,7 @@ const InsertPurchaseHeaderForm = (props: InsertPurchaseHeaderFormProps) => {
                     </DialogContent>
 
                     <DialogActions>
-                        <Button type='submit' variant='contained' form={'detail-form'} color='primary'>
+                        <Button type='submit' variant='contained' form={'edit-detail-form'} color='primary'>
                             Simpan
                         </Button>
                         <Button variant='outlined' onClick={handleCloseEditDialog}>
