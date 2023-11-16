@@ -4,7 +4,7 @@ import Header from "../../components/Header";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useSnackBar from '../../hooks/useSnackBar';
-import { GET_JOURNAL_ENTRY_BY_ID, UPDATE_JOURNAL_ENTRY_URL } from '../../axios';
+import { GET_JOURNAL_ENTRY_BY_ID_URL, UPDATE_JOURNAL_ENTRY_URL } from '../../axios';
 import IJournalEntry, { EmptyJournalEntry } from '../../models/IJournalEntry';
 import InsertJournalEntryForm from './InsertJournalEntryForm';
 import { ConvertDateTimeToDate } from '../../utils/Converter';
@@ -21,7 +21,7 @@ const JournalEntryForm = () => {
 
 	useEffect(() => {
 		const fetchGeneralJournal = async () => {
-			const response = await axiosPrivate.get(GET_JOURNAL_ENTRY_BY_ID(id!));
+			const response = await axiosPrivate.get(GET_JOURNAL_ENTRY_BY_ID_URL(id!));
 			const data: IJournalEntry = response.data;
 			if (data) {
 				setJournalEntry(data);
@@ -32,7 +32,7 @@ const JournalEntryForm = () => {
 		};
 
 		fetchGeneralJournal();
-	}, []);
+	}, [isEditMode]);
 
 	const onClickEdit = () => {
 		setJournalEntry(journalEntry);

@@ -6,11 +6,12 @@ import {
     Button,
     Typography,
     Grid,
+    Stack,
 } from "@mui/material";
 import Header from "../../components/Header";
 import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
-import { GET_JOURNAL_ENTRIES, INSERT_JOURNAL_ENTRY_URL } from '../../axios';
+import { GET_JOURNAL_ENTRIES_URL, INSERT_JOURNAL_ENTRY_URL } from '../../axios';
 import useSnackBar from '../../hooks/useSnackBar';
 import IJournalEntry, { EmptyJournalEntry } from '../../models/IJournalEntry';
 import InsertJournalEntryForm from './InsertJournalEntryForm';
@@ -37,7 +38,7 @@ const JournalEntryTree = () => {
     useEffect(() => {
         const fetchJournalEntries = async () => {
             try {
-                const response = await axiosPrivate.get(GET_JOURNAL_ENTRIES());
+                const response = await axiosPrivate.get(GET_JOURNAL_ENTRIES_URL());
                 const data = response.data;
 
                 if (data.error) {
@@ -151,13 +152,26 @@ const JournalEntryTree = () => {
                             columns={columns}
                             getRowId={(row) => row?.id}
                             onRowClick={(params) => handleOnRowClicked(params)}
+                            autoHeight
                             sx={{
                                 '.MuiDataGrid-cell:focus': {
                                     outline: 'none'
                                 },
                                 '.MuiDataGrid-cell:hover': {
                                     cursor: 'pointer'
-                                }
+                                },
+                            }}
+                            slots={{
+                                noRowsOverlay: () => (
+                                    <Stack height="100%" alignItems={'center'} justifyContent={'center'}>
+                                        Data kosong.
+                                    </Stack>
+                                ),
+                                noResultsOverlay: () => (
+                                    <Stack height="100%" alignItems={'center'} justifyContent={'center'}>
+                                        Data tidak ditemukan.
+                                    </Stack>
+                                ),
                             }}
                         />
                     </Box>
